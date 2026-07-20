@@ -1,0 +1,91 @@
+# =====================================================================
+# .gitignore — monorepo Humania (Unity + web)
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# Unity — carpetas generadas (se recrean solas; NO subir)
+# Solo deben viajar: Assets/, ProjectSettings/, Packages/
+# ---------------------------------------------------------------------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Los .meta deben acompañar a su asset (no ignorarlos dentro de Assets)
+!juego-unity/[Aa]ssets/**/*.meta
+
+# Rider / Visual Studio / solución y proyectos autogenerados
+.vs/
+.idea/
+.gradle/
+ExportedObj/
+juego-unity/[Aa]ssets/Plugins/Editor/JetBrains*
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Reportes de crash e info del sistema
+sysinfo.txt
+crashlytics-build.properties
+
+# Builds empaquetados
+*.apk
+*.aab
+*.app
+*.unitypackage
+
+# Addressables temporales
+juego-unity/[Aa]ssets/[Ss]treamingAssets/aa.meta
+juego-unity/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ---------------------------------------------------------------------
+# Web (panel-web)
+# ---------------------------------------------------------------------
+node_modules/
+dist/
+.cache/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------------------------------------------------------------
+# Secretos y configuración de entorno (¡nunca subir claves!)
+# La service_role de Supabase JAMÁS va al repo.
+# ---------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+config.local.*
+secrets.*
+
+# ---------------------------------------------------------------------
+# Sistema operativo
+# ---------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------------
+# Editores varios
+# ---------------------------------------------------------------------
+*.swp
+*.swo
+*~
+
+# Config local del panel (copiar desde config.example.js)
+panel-web/config.js
