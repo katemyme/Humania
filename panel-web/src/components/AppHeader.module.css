@@ -21,7 +21,7 @@
 }
 
 .brandLetters {
-  height: 22px;
+  height: 32px;
   width: auto;
   object-fit: contain;
   /* brightness(0)→todo negro, invert(1)→todo blanco. Resultado: letras blancas
