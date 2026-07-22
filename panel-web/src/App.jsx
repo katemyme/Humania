@@ -1,15 +1,36 @@
-// Bootstrap placeholder — el enrutado y las vistas se implementan tras la
-// aprobación de la estructura propuesta (ver CLAUDE.md).
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './context/AuthContext.jsx'
+import Login from './views/Login.jsx'
+import Dashboard from './views/Dashboard.jsx'
+import SalaDetalle from './views/SalaDetalle.jsx'
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth()
+  return user ? children : <Navigate to="/login" replace />
+}
+
+function PublicRoute({ children }) {
+  const { user } = useAuth()
+  return user ? <Navigate to="/salas" replace /> : children
+}
+
 export default function App() {
   return (
-    <div style={{ padding: 40, fontFamily: 'Open Sans, sans-serif' }}>
-      <h1 style={{ fontFamily: 'Quicksand, sans-serif', color: '#1E3A8A' }}>
-        Panel Docente Humania
-      </h1>
-      <p style={{ color: '#64748B' }}>
-        Proyecto React + Vite inicializado. Esperando visto bueno de la
-        estructura para implementar las vistas.
-      </p>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={
+            <PublicRoute><Login /></PublicRoute>
+          } />
+          <Route path="/salas" element={
+            <ProtectedRoute><Dashboard /></ProtectedRoute>
+          } />
+          <Route path="/salas/:id" element={
+            <ProtectedRoute><SalaDetalle /></ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="/salas" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
