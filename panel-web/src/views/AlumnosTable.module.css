@@ -1,0 +1,86 @@
+.table {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  overflow: hidden;
+}
+
+.thead {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr 1.3fr 1fr;
+  padding: 14px 24px;
+  background: var(--color-fondo);
+  border-bottom: 2px solid var(--color-borde);
+}
+.thead span {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr 1.3fr 1fr;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #F1F5F9;
+  transition: background 0.1s;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: #F1F5F9; }
+
+.alumno {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radio-pill);
+  background: var(--color-azul-badge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-azul);
+  flex-shrink: 0;
+}
+
+.nombre {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-texto);
+}
+
+.progresoCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 160px;
+}
+
+.pct {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+  min-width: 32px;
+}
+
+.actividad {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-placeholder);
+  font-size: 14px;
+}
