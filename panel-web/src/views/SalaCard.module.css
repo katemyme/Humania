@@ -1,0 +1,64 @@
+.card {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-borde);
+  border-radius: 22px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.card:hover { border-color: var(--color-azul); }
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nombre {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--color-azul-oscuro);
+  margin: 0 0 4px 0;
+}
+
+.grado {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.reinos {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.badge {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: var(--radio-pill);
+}
+.verde { background: var(--color-verde-suave); color: var(--color-verde-texto); }
+.rojo  { background: var(--color-rojo-suave);  color: var(--color-rojo-texto); }
+
+.progreso {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progresoMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+.progresoMeta span:last-child { font-weight: 600; }
