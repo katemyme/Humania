@@ -37,6 +37,9 @@
   flex-shrink: 0;
   flex-wrap: wrap;
   justify-content: flex-end;
+  /* altura mínima = 1 chip; evita que cards con 1 chip vs 2 chips desalineen cabeceras */
+  min-height: 28px;
+  align-content: flex-start;
 }
 
 .badge {
@@ -46,8 +49,9 @@
   padding: 5px 10px;
   border-radius: var(--radio-pill);
 }
-.verde { background: var(--color-verde-suave); color: var(--color-verde-texto); }
-.rojo  { background: var(--color-rojo-suave);  color: var(--color-rojo-texto); }
+/* #166534 sobre #DCFCE7 ≈ 5.1:1 ✓  |  #991B1B sobre #FEE2E2 ≈ 5.3:1 ✓  (WCAG AA) */
+.verde { background: var(--color-verde-suave); color: #166534; }
+.rojo  { background: var(--color-rojo-suave);  color: #991B1B; }
 
 .progreso {
   display: flex;
