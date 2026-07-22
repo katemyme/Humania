@@ -1,0 +1,62 @@
+/* Design tokens Humania — ver CLAUDE.md para la referencia completa. */
+:root {
+  /* Marca */
+  --color-azul: #2563EB;
+  --color-azul-oscuro: #1E3A8A;
+  --color-amarillo: #FDCD10;
+  --color-amarillo-hover: #f5c400;
+  --color-amarillo-active: #e6b900;
+
+  /* Superficies / neutros */
+  --color-fondo: #F8FAFC;
+  --color-blanco: #FFFFFF;
+  --color-borde: #E2E8F0;
+  --color-texto: #1E293B;
+  --color-texto-secundario: #64748B;
+  --color-placeholder: #94A3B8;
+
+  /* Reino Verde */
+  --color-verde: #22C55E;
+  --color-verde-texto: #15803D;
+  --color-verde-suave: #DCFCE7;
+  --color-verde-fondo: #F0FDF4;
+
+  /* Reino Rojo */
+  --color-rojo: #EF4444;
+  --color-rojo-texto: #B91C1C;
+  --color-rojo-suave: #FEE2E2;
+  --color-rojo-fondo: #FEF2F2;
+
+  /* Azules claros (badges) */
+  --color-azul-badge: #DBEAFE;
+  --color-azul-badge-fondo: #EFF6FF;
+  --color-azul-badge-claro: #93C5FD;
+
+  /* Tipografía */
+  --font-titulo: 'Quicksand', sans-serif;
+  --font-cuerpo: 'Open Sans', sans-serif;
+
+  /* Radios */
+  --radio-sm: 12px;
+  --radio-md: 16px;
+  --radio-lg: 20px;
+  --radio-xl: 28px;
+  --radio-pill: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font-cuerpo);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
