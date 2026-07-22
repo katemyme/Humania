@@ -8,6 +8,7 @@ import Button from '../components/Button.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useSalas } from '../hooks/useSalas.js'
 import { useToast } from '../hooks/useToast.js'
+import { calcAvancePromedio } from '../utils/stats.js'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
@@ -17,12 +18,10 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false)
 
   const totalAlumnos = salas.reduce((a, s) => a + s.alumnos, 0)
-  const avgProgreso = salas.length
-    ? Math.round(salas.reduce((a, s) => a + s.progreso, 0) / salas.length)
-    : 0
+  const avgProgreso = calcAvancePromedio(salas)
 
+  // RoomCodeChip ya escribe al portapapeles internamente; aquí solo mostramos toast.
   function handleCopy(codigo) {
-    navigator.clipboard?.writeText(codigo).catch(() => {})
     showToast(`Código ${codigo} copiado`)
   }
 
