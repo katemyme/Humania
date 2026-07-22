@@ -13,11 +13,18 @@
   gap: 12px;
 }
 
-.brandName {
-  font-family: var(--font-titulo);
-  font-weight: 700;
-  font-size: 22px;
-  color: var(--color-fondo);
+.brandIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.brandLetters {
+  height: 22px;
+  width: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .right {

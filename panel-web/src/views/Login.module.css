@@ -31,12 +31,16 @@
   margin-bottom: 24px;
 }
 
-.title {
-  font-family: var(--font-titulo);
-  font-weight: 700;
-  font-size: 28px;
-  color: var(--color-azul-oscuro);
-  margin: 0;
+.icon {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+}
+
+.letters {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
 }
 
 .subtitle {

@@ -1,4 +1,5 @@
-import Logo from './Logo.jsx'
+import iconImg from '../assets/Icon.png'
+import lettersImg from '../assets/Letters.png'
 import { useAuth } from '../context/AuthContext.jsx'
 import styles from './AppHeader.module.css'
 
@@ -12,8 +13,8 @@ export default function AppHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.brand}>
-        <Logo size="sm" />
-        <span className={styles.brandName}>Humania</span>
+        <img src={iconImg} alt="" className={styles.brandIcon} />
+        <img src={lettersImg} alt="Humania" className={styles.brandLetters} />
       </div>
       <div className={styles.right}>
         <span className={`${styles.badge} ${badge.className}`}>{badge.label}</span>

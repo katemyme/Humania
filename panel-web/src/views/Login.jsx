@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Logo from '../components/Logo.jsx'
+import iconImg from '../assets/Icon.png'
+import lettersImg from '../assets/Letters.png'
 import Field from '../components/Field.jsx'
 import Button from '../components/Button.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -27,8 +28,8 @@ export default function Login() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <Logo size="lg" />
-          <h1 className={styles.title}>Humania</h1>
+          <img src={iconImg} alt="Humania" className={styles.icon} />
+          <img src={lettersImg} alt="Humania" className={styles.letters} />
           <p className={styles.subtitle}>Panel docente</p>
         </div>
 
