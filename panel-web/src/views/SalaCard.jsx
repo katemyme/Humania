@@ -30,7 +30,10 @@ export default function SalaCard({ sala, onCopy }) {
           <span>{sala.alumnos} alumnos</span>
           <span>{sala.progreso}% avance</span>
         </div>
-        <ProgressBar pct={sala.progreso} />
+        <ProgressBar
+          pct={sala.progreso}
+          ariaLabel={`Avance de ${sala.nombre}: ${sala.progreso}%`}
+        />
       </div>
 
       <Button variant="outline" onClick={() => navigate(`/salas/${sala.id}`)}>

@@ -25,11 +25,21 @@ export default function AlumnosTable({ alumnos }) {
             <span className={styles.nombre}>{st.nombre}</span>
           </div>
           <div className={styles.progresoCell}>
-            <ProgressBar pct={st.verde} color="var(--color-verde)" height={8} />
+            <ProgressBar
+              pct={st.verde}
+              color="var(--color-verde)"
+              height={8}
+              ariaLabel={`${st.nombre} - Reino Verde: ${st.verde}%`}
+            />
             <span className={styles.pct}>{st.verde}%</span>
           </div>
           <div className={styles.progresoCell}>
-            <ProgressBar pct={st.rojo} color="var(--color-rojo)" height={8} />
+            <ProgressBar
+              pct={st.rojo}
+              color="var(--color-rojo)"
+              height={8}
+              ariaLabel={`${st.nombre} - Reino Rojo: ${st.rojo}%`}
+            />
             <span className={styles.pct}>{st.rojo}%</span>
           </div>
           <span className={styles.actividad}>{st.ultimaActividad}</span>
