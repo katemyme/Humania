@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F8FAFC; font-family: 'Open Sans', sans-serif; }
+    .back-link:hover { color: #1E3A8A !important; }
+    .copy-chip:hover { background: #1E3A8A !important; }
+    .tab-btn:hover { background: #EFF6FF !important; }
+    .student-row:hover { background: #F1F5F9 !important; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; width: 100%; box-sizing: border-box; display: flex; flex-direction: column;">
+
+  <header style="background: #2563EB; padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 44px; height: 44px; border-radius: 14px; background: #1E3A8A; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 18px; height: 18px; border-radius: 6px; background: #FDCD10;"></div>
+      </div>
+      <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 22px; color: #F8FAFC;">Humania</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; color: #1E3A8A; background: {{ roleBadge.bg }}; padding: 6px 14px; border-radius: 999px;">{{ roleBadge.label }}</span>
+      <div style="width: 40px; height: 40px; border-radius: 999px; background: #FDCD10; display: flex; align-items: center; justify-content: center; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #1E3A8A; font-size: 15px;">MP</div>
+    </div>
+  </header>
+
+  <main style="flex: 1; padding: 40px; max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px;">
+
+    <a href="#" class="back-link" style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: #64748B; text-decoration: none; display: flex; align-items: center; gap: 6px;">&larr; Volver a mis salas</a>
+
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <h1 style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 30px; color: #1E3A8A; margin: 0 0 4px 0;">{{ sala.nombre }}</h1>
+        <p style="font-size: 15px; color: #64748B; margin: 0;">{{ sala.grado }}</p>
+      </div>
+      <div class="copy-chip" onClick="{{ copyCode }}" style="background: #1E3A8A; border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 16px; cursor: pointer;">
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 11px; color: #93C5FD; font-family: 'Quicksand', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Código de sala</span>
+          <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 20px; color: #F8FAFC; letter-spacing: 0.08em;">{{ sala.codigo }}</span>
+        </div>
+        <span style="font-size: 12px; color: #FDCD10; font-family: 'Quicksand', sans-serif; font-weight: 700;">Copiar</span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+      <div style="background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; border: 2px solid #E2E8F0;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; color: #1E3A8A;">{{ sala.alumnos }}</span>
+        <span style="font-size: 14px; color: #64748B;">Alumnos</span>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; border: 2px solid #E2E8F0;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; color: #15803D;">{{ stats.avgVerde }}%</span>
+        <span style="font-size: 14px; color: #64748B;">Avance Reino Verde</span>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; border: 2px solid #E2E8F0;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; color: #B91C1C;">{{ stats.avgRojo }}%</span>
+        <span style="font-size: 14px; color: #64748B;">Avance Reino Rojo</span>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; border: 2px solid #E2E8F0;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; color: #1E3A8A;">{{ stats.completados }}</span>
+        <span style="font-size: 14px; color: #64748B;">Alumnos completaron ambos reinos</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+      <div style="display: flex; gap: 8px;">
+        <button class="tab-btn" onClick="{{ setFilter.todos }}" style="height: 40px; padding: 0 18px; border-radius: 12px; border: 2px solid {{ filterBorder.todos }}; background: {{ filterBg.todos }}; color: #1E3A8A; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer;">Todos</button>
+        <button class="tab-btn" onClick="{{ setFilter.verde }}" style="height: 40px; padding: 0 18px; border-radius: 12px; border: 2px solid {{ filterBorder.verde }}; background: {{ filterBg.verde }}; color: #15803D; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer;">Reino Verde</button>
+        <button class="tab-btn" onClick="{{ setFilter.rojo }}" style="height: 40px; padding: 0 18px; border-radius: 12px; border: 2px solid {{ filterBorder.rojo }}; background: {{ filterBg.rojo }}; color: #B91C1C; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer;">Reino Rojo</button>
+      </div>
+      <input placeholder="Buscar alumno…" value="{{ search }}" onChange="{{ onSearchChange }}" style="height: 44px; width: 220px; border-radius: 14px; border: 2px solid #E2E8F0; padding: 0 16px; font-size: 14px; box-sizing: border-box; background: #FFFFFF;" />
+    </div>
+
+    <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 2fr 1.3fr 1.3fr 1fr; padding: 14px 24px; background: #F8FAFC; border-bottom: 2px solid #E2E8F0;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; color: #64748B; text-transform: uppercase; letter-spacing: 0.04em;">Alumno</span>
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; color: #64748B; text-transform: uppercase; letter-spacing: 0.04em;">Reino Verde</span>
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; color: #64748B; text-transform: uppercase; letter-spacing: 0.04em;">Reino Rojo</span>
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; color: #64748B; text-transform: uppercase; letter-spacing: 0.04em;">Últ. actividad</span>
+      </div>
+      <sc-for list="{{ filteredStudents }}" as="st" hint-placeholder-count="5">
+        <div class="student-row" style="display: grid; grid-template-columns: 2fr 1.3fr 1.3fr 1fr; align-items: center; padding: 16px 24px; border-bottom: 1px solid #F1F5F9;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; border-radius: 999px; background: #DBEAFE; display: flex; align-items: center; justify-content: center; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; color: #2563EB; flex-shrink: 0;">{{ st.initials }}</div>
+            <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 15px; color: #1E293B;">{{ st.nombre }}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1; height: 8px; border-radius: 999px; background: #E2E8F0; overflow: hidden; max-width: 100px;">
+              <div style="width: {{ st.verdeWidth }}; height: 100%; background: #22C55E; border-radius: 999px;"></div>
+            </div>
+            <span style="font-size: 13px; color: #64748B; min-width: 32px;">{{ st.verde }}%</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1; height: 8px; border-radius: 999px; background: #E2E8F0; overflow: hidden; max-width: 100px;">
+              <div style="width: {{ st.rojoWidth }}; height: 100%; background: #EF4444; border-radius: 999px;"></div>
+            </div>
+            <span style="font-size: 13px; color: #64748B; min-width: 32px;">{{ st.rojo }}%</span>
+          </div>
+          <span style="font-size: 13px; color: #64748B;">{{ st.ultimaActividad }}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 32px; text-align: center; color: #94A3B8; font-size: 14px;">No se encontraron alumnos.</div>
+      </sc-if>
+    </div>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;role&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;docente&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;docente&quot;, &quot;auditor&quot;], &quot;section&quot;: &quot;Rol&quot;}}">
+const SALA = { nombre: '5°B Ciencias', grado: '5° grado', codigo: 'HUM-4X9K', alumnos: 24 };
+
+const STUDENTS = [
+  { id: 1, nombre: 'Ana Torres', verde: 92, rojo: 78, ultimaActividad: 'Hoy' },
+  { id: 2, nombre: 'Bruno Reyes', verde: 65, rojo: 40, ultimaActividad: 'Ayer' },
+  { id: 3, nombre: 'Camila Ruiz', verde: 100, rojo: 100, ultimaActividad: 'Hoy' },
+  { id: 4, nombre: 'Diego Soto', verde: 30, rojo: 12, ultimaActividad: 'Hace 3 días' },
+  { id: 5, nombre: 'Elena Vidal', verde: 88, rojo: 55, ultimaActividad: 'Hoy' },
+  { id: 6, nombre: 'Franco Mella', verde: 45, rojo: 0, ultimaActividad: 'Hace 1 semana' },
+  { id: 7, nombre: 'Gabriela Paz', verde: 70, rojo: 82, ultimaActividad: 'Ayer' },
+];
+
+function initials(name) {
+  return name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+}
+
+class Component extends DCLogic {
+  state = { role: 'docente', filter: 'todos', search: '' };
+
+  renderVals() {
+    const isAuditor = this.props.role === 'auditor' || this.state.role === 'auditor';
+    const { filter, search } = this.state;
+    const q = search.trim().toLowerCase();
+
+    let students = STUDENTS;
+    if (filter === 'verde') students = students.filter(s => s.verde >= 50);
+    if (filter === 'rojo') students = students.filter(s => s.rojo >= 50);
+    if (q) students = students.filter(s => s.nombre.toLowerCase().includes(q));
+
+    const filteredStudents = students.map(s => ({
+      ...s,
+      initials: initials(s.nombre),
+      verdeWidth: s.verde + '%',
+      rojoWidth: s.rojo + '%',
+    }));
+
+    const avg = (arr, key) => arr.length ? Math.round(arr.reduce((a, s) => a + s[key], 0) / arr.length) : 0;
+    const completados = STUDENTS.filter(s => s.verde === 100 && s.rojo === 100).length;
+
+    const mk = key => ({
+      border: filter === key ? { verde: '#22C55E', rojo: '#EF4444', todos: '#2563EB' }[key] : '#E2E8F0',
+      bg: filter === key ? { verde: '#F0FDF4', rojo: '#FEF2F2', todos: '#EFF6FF' }[key] : '#FFFFFF',
+    });
+
+    return {
+      sala: SALA,
+      roleBadge: isAuditor ? { label: 'Auditor · solo lectura', bg: '#E2E8F0' } : { label: 'Docente', bg: '#FDCD10' },
+      stats: { avgVerde: avg(STUDENTS, 'verde'), avgRojo: avg(STUDENTS, 'rojo'), completados },
+      search,
+      onSearchChange: e => this.setState({ search: e.target.value }),
+      filterBorder: { todos: mk('todos').border, verde: mk('verde').border, rojo: mk('rojo').border },
+      filterBg: { todos: mk('todos').bg, verde: mk('verde').bg, rojo: mk('rojo').bg },
+      setFilter: {
+        todos: () => this.setState({ filter: 'todos' }),
+        verde: () => this.setState({ filter: 'verde' }),
+        rojo: () => this.setState({ filter: 'rojo' }),
+      },
+      filteredStudents,
+      noResults: filteredStudents.length === 0,
+      copyCode: () => navigator.clipboard?.writeText(SALA.codigo).catch(() => {}),
+    };
+  }
+}
+</script>
+</body>
+</html>

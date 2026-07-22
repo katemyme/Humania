@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #2563EB; }
+    ::placeholder { color: #94A3B8; font-family: 'Open Sans', sans-serif; }
+    a.forgot { color: #1E3A8A; }
+    a.forgot:hover { color: #0f254f; }
+    input:focus { outline: none; border-color: #FDCD10 !important; box-shadow: 0 0 0 3px rgba(253,205,16,0.35); }
+  </style>
+</helmet>
+<div style="min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; background: #2563EB; font-family: 'Open Sans', sans-serif; padding: 24px; box-sizing: border-box;">
+  <div style="width: 100%; max-width: 420px; background: #F8FAFC; border-radius: 28px; padding: 48px 40px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-sizing: border-box;">
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 24px;">
+      <div style="width: 72px; height: 72px; border-radius: 20px; background: #2563EB; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 30px; height: 30px; border-radius: 8px; background: #FDCD10;"></div>
+      </div>
+      <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; color: #1E3A8A;">Humania</div>
+      <div style="font-family: 'Open Sans', sans-serif; font-size: 15px; color: #64748B;">Panel docente</div>
+    </div>
+
+    <form style="width: 100%; display: flex; flex-direction: column; gap: 18px;" onSubmit="{{ handleSubmit }}">
+      <label style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: #1E3A8A;">Correo electrónico</span>
+        <input type="email" placeholder="docente@escuela.edu" value="{{ email }}" onChange="{{ onEmailChange }}" style="height: 52px; border-radius: 14px; border: 2px solid #E2E8F0; padding: 0 16px; font-family: 'Open Sans', sans-serif; font-size: 15px; color: #1E293B; background: #FFFFFF; box-sizing: border-box;" />
+      </label>
+
+      <label style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 14px; color: #1E3A8A;">Contraseña</span>
+        <input type="password" placeholder="••••••••" value="{{ password }}" onChange="{{ onPasswordChange }}" style="height: 52px; border-radius: 14px; border: 2px solid #E2E8F0; padding: 0 16px; font-family: 'Open Sans', sans-serif; font-size: 15px; color: #1E293B; background: #FFFFFF; box-sizing: border-box;" />
+      </label>
+
+      <button type="submit" style="margin-top: 8px; height: 54px; border-radius: 16px; border: none; background: #FDCD10; color: #1E3A8A; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 17px; cursor: pointer;" style-hover="background: #f5c400;" style-active="background: #e6b900;">Iniciar sesión</button>
+    </form>
+
+    <a href="#" class="forgot" style="margin-top: 18px; font-family: 'Open Sans', sans-serif; font-size: 14px; text-decoration: none;">¿Olvidaste tu contraseña?</a>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { email: '', password: '' };
+  renderVals() {
+    return {
+      email: this.state.email,
+      password: this.state.password,
+      onEmailChange: e => this.setState({ email: e.target.value }),
+      onPasswordChange: e => this.setState({ password: e.target.value }),
+      handleSubmit: e => e.preventDefault(),
+    };
+  }
+}
+</script>
+</body>
+</html>
