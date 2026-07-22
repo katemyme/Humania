@@ -32,9 +32,9 @@ export default function SalaDetalle() {
 
   const completados = alumnos.filter(s => s.verde === 100 && s.rojo === 100).length
 
-  function handleCopy() {
-    navigator.clipboard?.writeText(sala.codigo).catch(() => {})
-    showToast(`Código ${sala.codigo} copiado`)
+  // RoomCodeChip escribe al portapapeles internamente; aquí solo mostramos toast.
+  function handleCopy(codigo) {
+    showToast(`Código ${codigo} copiado`)
   }
 
   function filterClass(key) {

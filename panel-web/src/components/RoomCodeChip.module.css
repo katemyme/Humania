@@ -1,5 +1,7 @@
 .chip {
+  width: 100%;
   background: var(--color-azul-oscuro);
+  border: none;
   border-radius: 14px;
   padding: 12px 16px;
   display: flex;
@@ -7,10 +9,11 @@
   justify-content: space-between;
   cursor: pointer;
   transition: background 0.15s;
-  outline: none;
+  text-align: left;
 }
-.chip:hover  { background: #162d6e; }
-.chip:focus-visible { box-shadow: 0 0 0 3px rgba(253, 205, 16, 0.5); }
+.chip:hover       { background: #162d6e; }
+.chip:focus-visible { outline: 3px solid rgba(253, 205, 16, 0.7); outline-offset: 2px; }
+.chipCopied { background: #162d6e; }
 
 .info {
   display: flex;
