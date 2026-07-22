@@ -24,6 +24,9 @@
   height: 22px;
   width: auto;
   object-fit: contain;
+  /* brightness(0)→todo negro, invert(1)→todo blanco. Resultado: letras blancas
+     con fondo transparente sobre el header azul. Contraste blanco/#2563EB ≈ 4.8:1 ✓ WCAG AA */
+  filter: brightness(0) invert(1);
 }
 
 .right {
