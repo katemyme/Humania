@@ -29,7 +29,6 @@ export default function Login() {
       <div className={styles.card}>
         <div className={styles.header}>
           <img src={iconImg} alt="Humania" className={styles.icon} />
-          <img src={lettersImg} alt="Humania" className={styles.letters} />
           <p className={styles.subtitle}>Panel docente</p>
         </div>
 

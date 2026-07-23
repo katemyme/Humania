@@ -21,8 +21,8 @@
 }
 
 .brandLetters {
-  height: 32px;
-  width: auto;
+  height: auto;
+  width: 80px;
   object-fit: contain;
   /* brightness(0)→todo negro, invert(1)→todo blanco. Resultado: letras blancas
      con fondo transparente sobre el header azul. Contraste blanco/#2563EB ≈ 4.8:1 ✓ WCAG AA */
