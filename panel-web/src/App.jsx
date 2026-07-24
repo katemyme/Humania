@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext.jsx'
 import Login from './views/Login.jsx'
+import Register from './views/Register.jsx'
 import Dashboard from './views/Dashboard.jsx'
 import SalaDetalle from './views/SalaDetalle.jsx'
 import AlumnoDetalle from './views/AlumnoDetalle.jsx'
@@ -25,6 +26,9 @@ export default function App() {
         <Routes>
           <Route path="/login" element={
             <PublicRoute><Login /></PublicRoute>
+          } />
+          <Route path="/registro" element={
+            <PublicRoute><Register /></PublicRoute>
           } />
           <Route path="/salas" element={
             <ProtectedRoute><Dashboard /></ProtectedRoute>

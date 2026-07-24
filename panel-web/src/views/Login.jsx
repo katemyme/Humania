@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import iconImg from '../assets/Icon.png'
 import lettersImg from '../assets/Letters.png'
 import Field from '../components/Field.jsx'
@@ -64,6 +64,7 @@ export default function Login() {
         </form>
 
         <a href="#" className={styles.forgot}>¿Olvidaste tu contraseña?</a>
+        <Link to="/registro" className={styles.forgot}>¿No tienes cuenta? Regístrate</Link>
       </div>
     </div>
   )

@@ -11,6 +11,29 @@ function friendlyDbError(error) {
   return 'Ocurrió un error al comunicarse con el servidor. Inténtalo de nuevo.'
 }
 
+export async function registrarDocente({ fullName, email, password, code }) {
+  const { data, error } = await supabase.functions.invoke('registrar-docente', {
+    body: { email, password, full_name: fullName, code },
+  })
+
+  if (error) {
+    let mensaje = friendlyDbError(error)
+    if (typeof error.context?.json === 'function') {
+      try {
+        const body = await error.context.json()
+        if (body?.error) mensaje = body.error
+      } catch {
+        // el cuerpo de la respuesta no era JSON; se mantiene el mensaje genérico
+      }
+    }
+    throw new Error(mensaje)
+  }
+
+  if (data?.error) throw new Error(data.error)
+
+  return data
+}
+
 const SALA_SELECT = `
   id,
   name,
