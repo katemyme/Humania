@@ -70,6 +70,8 @@ create table public.questions (
   kingdom_id   smallint not null references public.kingdoms(id) on delete cascade,
   level_id     integer references public.levels(id) on delete set null,
   author_id    uuid references public.profiles(id) on delete set null,  -- null = contenido base
+  -- group_id se agrega más abajo con alter table (groups aún no existe aquí);
+  -- null = contenido base, con valor = pregunta propia de esa sala
   type         public.question_type not null,
   prompt       text not null,
   created_at   timestamptz not null default now()
@@ -109,6 +111,12 @@ create table public.group_members (
   joined_at   timestamptz not null default now(),
   primary key (group_id, student_id)
 );
+
+-- 4.1 Preguntas propias de una sala. NULL = contenido base (ver también
+--     comentario en public.questions). Se agrega aquí porque groups
+--     todavía no existía cuando se creó la tabla questions.
+alter table public.questions
+  add column group_id uuid references public.groups(id) on delete cascade;
 
 -- ---------------------------------------------------------------------
 -- 5. Progreso (siempre por alumno + sala)
@@ -150,6 +158,7 @@ create index idx_levels_kingdom       on public.levels(kingdom_id);
 create index idx_skills_kingdom       on public.skills(kingdom_id);
 create index idx_questions_kingdom    on public.questions(kingdom_id);
 create index idx_questions_level      on public.questions(level_id);
+create index idx_questions_group      on public.questions(group_id);
 create index idx_qoptions_question    on public.question_options(question_id);
 create index idx_groups_teacher       on public.groups(teacher_id);
 create index idx_members_student      on public.group_members(student_id);
@@ -309,12 +318,33 @@ create policy skills_admin on public.skills for all to authenticated
   using ( public.get_my_role() = 'admin' ) with check ( public.get_my_role() = 'admin' );
 
 -- 8.3 Preguntas y opciones: lectura para autenticados; el docente gestiona las suyas.
-create policy questions_read on public.questions for select to authenticated using ( true );
+-- questions: contenido base (group_id null) lo lee cualquiera; una pregunta
+-- propia de una sala solo la ven su docente, los alumnos de esa sala y el auditor.
+create policy questions_read on public.questions for select to authenticated
+  using (
+    group_id is null
+    or public.get_my_role() = 'auditor'
+    or public.is_group_teacher(group_id)
+    or public.is_group_member(group_id)
+  );
 create policy questions_author on public.questions for all to authenticated
-  using ( author_id = auth.uid() and public.get_my_role() = 'admin' )
-  with check ( author_id = auth.uid() and public.get_my_role() = 'admin' );
+  using ( author_id = auth.uid() and public.get_my_role() = 'admin' and public.is_group_teacher(group_id) )
+  with check ( author_id = auth.uid() and public.get_my_role() = 'admin' and public.is_group_teacher(group_id) );
 
-create policy qoptions_read on public.question_options for select to authenticated using ( true );
+-- question_options hereda la visibilidad de su pregunta.
+create policy qoptions_read on public.question_options for select to authenticated
+  using (
+    exists (
+      select 1 from public.questions q
+      where q.id = question_id
+        and (
+          q.group_id is null
+          or public.get_my_role() = 'auditor'
+          or public.is_group_teacher(q.group_id)
+          or public.is_group_member(q.group_id)
+        )
+    )
+  );
 create policy qoptions_author on public.question_options for all to authenticated
   using ( exists (select 1 from public.questions q where q.id = question_id and q.author_id = auth.uid()) )
   with check ( exists (select 1 from public.questions q where q.id = question_id and q.author_id = auth.uid()) );

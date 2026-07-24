@@ -43,10 +43,22 @@ Panel web (docente)
 - Reportes (lectura): `player_progress`, `player_responses`, `unlocked_skills`
 - Alumnos de una sala: `group_members`, `profiles`
 
+`questions.group_id` (agregado en `backend/migrations/0002_preguntas_por_sala.sql`):
+`null` = contenido base del juego (lo lee cualquiera, no editable desde el panel).
+Con valor = pregunta propia de esa sala: solo la ven su docente, los alumnos
+miembros de esa sala y el auditor. Ningún otro docente. Al crear una pregunta
+desde el panel, el docente debe elegir a cuál de sus salas pertenece.
+
 Juego (alumno)
 
 - Unirse a una sala: función `join_group('CODIGO')`
 - Leer contenido: `kingdoms`, `levels`, `skills`, `questions`, `question_options`
+  - Importante: al pedir preguntas de un reino para una sala, filtrar por
+    `questions.group_id is null or questions.group_id = <id de la sala actual>`.
+    Si solo se filtra por `kingdom_id`, RLS ya bloquea las preguntas de salas
+    ajenas, pero igual hay que armar el query con ese filtro para no traer
+    menos de lo esperado (o para no depender de que RLS oculte filas en
+    silencio en vez de excluirlas explícitamente en el query).
 - Guardar avance: `player_responses`, `player_progress`, `unlocked_skills`
 
  Edge Function
