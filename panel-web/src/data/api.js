@@ -85,6 +85,107 @@ export async function setSalaActiva(id, activa) {
   if (error) throw new Error(friendlyDbError(error))
 }
 
+const PREGUNTA_SELECT = `
+  id,
+  kingdom_id,
+  level_id,
+  author_id,
+  type,
+  prompt,
+  created_at,
+  question_options(id, content, is_correct, correct_order, order_index)
+`
+
+function mapPregunta(q) {
+  return {
+    id: q.id,
+    kingdomId: q.kingdom_id,
+    levelId: q.level_id,
+    authorId: q.author_id,
+    tipo: q.type,
+    prompt: q.prompt,
+    opciones: (q.question_options ?? [])
+      .slice()
+      .sort((a, b) => a.order_index - b.order_index)
+      .map(o => ({
+        id: o.id,
+        content: o.content,
+        isCorrect: o.is_correct,
+        correctOrder: o.correct_order,
+      })),
+  }
+}
+
+export async function getPreguntas() {
+  const { data, error } = await supabase
+    .from('questions')
+    .select(PREGUNTA_SELECT)
+    .order('created_at', { ascending: false })
+
+  if (error) throw new Error(friendlyDbError(error))
+  return data.map(mapPregunta)
+}
+
+async function getPregunta(id) {
+  const { data, error } = await supabase
+    .from('questions')
+    .select(PREGUNTA_SELECT)
+    .eq('id', id)
+    .single()
+
+  if (error) throw new Error(friendlyDbError(error))
+  return mapPregunta(data)
+}
+
+// Reemplaza todas las opciones de una pregunta: evita choques con la
+// restricción unique(question_id, order_index) al reordenar/agregar/quitar.
+async function replaceOpciones(questionId, opciones) {
+  const { error: delError } = await supabase.from('question_options').delete().eq('question_id', questionId)
+  if (delError) throw new Error(friendlyDbError(delError))
+
+  if (!opciones.length) return
+
+  const rows = opciones.map((o, i) => ({
+    question_id: questionId,
+    content: o.content,
+    is_correct: !!o.isCorrect,
+    correct_order: o.correctOrder ?? null,
+    order_index: i,
+  }))
+  const { error } = await supabase.from('question_options').insert(rows)
+  if (error) throw new Error(friendlyDbError(error))
+}
+
+export async function createPregunta(authorId, { kingdomId, tipo, prompt, opciones }) {
+  const { data: inserted, error } = await supabase
+    .from('questions')
+    .insert({ author_id: authorId, kingdom_id: kingdomId, type: tipo, prompt })
+    .select('id')
+    .single()
+
+  if (error) throw new Error(friendlyDbError(error))
+
+  await replaceOpciones(inserted.id, opciones)
+  return getPregunta(inserted.id)
+}
+
+export async function updatePregunta(id, { kingdomId, tipo, prompt, opciones }) {
+  const { error } = await supabase
+    .from('questions')
+    .update({ kingdom_id: kingdomId, type: tipo, prompt })
+    .eq('id', id)
+
+  if (error) throw new Error(friendlyDbError(error))
+
+  await replaceOpciones(id, opciones)
+  return getPregunta(id)
+}
+
+export async function deletePregunta(id) {
+  const { error } = await supabase.from('questions').delete().eq('id', id)
+  if (error) throw new Error(friendlyDbError(error))
+}
+
 // --- Detalle de sala: aún no conectado a Supabase, sigue usando datos de ejemplo.
 let _salas = [...SALAS]
 

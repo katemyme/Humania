@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext.jsx'
 import Login from './views/Login.jsx'
 import Dashboard from './views/Dashboard.jsx'
 import SalaDetalle from './views/SalaDetalle.jsx'
+import Preguntas from './views/Preguntas.jsx'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -29,6 +30,9 @@ export default function App() {
           } />
           <Route path="/salas/:id" element={
             <ProtectedRoute><SalaDetalle /></ProtectedRoute>
+          } />
+          <Route path="/preguntas" element={
+            <ProtectedRoute><Preguntas /></ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/salas" replace />} />
         </Routes>

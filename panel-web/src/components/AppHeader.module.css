@@ -7,11 +7,35 @@
   box-sizing: border-box;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
 .brand {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
+.nav {
+  display: flex;
+  gap: 6px;
+}
+
+.navLink {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--radio-pill);
+  transition: background 0.15s, color 0.15s;
+}
+.navLink:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.navLinkActive { background: rgba(255, 255, 255, 0.18); color: #fff; }
 
 .brandIcon {
   width: 40px;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, NavLink } from 'react-router-dom'
 import iconImg from '../assets/Icon.png'
 import lettersImg from '../assets/Letters.png'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -33,9 +33,26 @@ export default function AppHeader() {
 
   return (
     <header className={styles.header}>
-      <div className={styles.brand}>
-        <img src={iconImg} alt="" className={styles.brandIcon} />
-        <img src={lettersImg} alt="Humania" className={styles.brandLetters} />
+      <div className={styles.left}>
+        <div className={styles.brand}>
+          <img src={iconImg} alt="" className={styles.brandIcon} />
+          <img src={lettersImg} alt="Humania" className={styles.brandLetters} />
+        </div>
+
+        <nav className={styles.nav}>
+          <NavLink
+            to="/salas"
+            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+          >
+            Mis salas
+          </NavLink>
+          <NavLink
+            to="/preguntas"
+            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+          >
+            Preguntas
+          </NavLink>
+        </nav>
       </div>
 
       <div className={styles.right}>

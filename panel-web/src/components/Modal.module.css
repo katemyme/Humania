@@ -16,6 +16,8 @@
   padding: 32px;
   width: 100%;
   max-width: 420px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
