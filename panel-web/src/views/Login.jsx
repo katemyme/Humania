@@ -20,8 +20,14 @@ export default function Login() {
     if (!email || !password) { setError('Completa todos los campos.'); return }
     setError('')
     setLoading(true)
-    await login(email, password)
-    navigate('/salas')
+    try {
+      await login(email, password)
+      navigate('/salas')
+    } catch (err) {
+      setError(err.message || 'Ocurrió un error al iniciar sesión. Inténtalo de nuevo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

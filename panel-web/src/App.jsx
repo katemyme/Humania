@@ -5,12 +5,14 @@ import Dashboard from './views/Dashboard.jsx'
 import SalaDetalle from './views/SalaDetalle.jsx'
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+  if (loading) return null
   return user ? children : <Navigate to="/login" replace />
 }
 
 function PublicRoute({ children }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+  if (loading) return null
   return user ? <Navigate to="/salas" replace /> : children
 }
 
