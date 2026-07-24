@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext.jsx'
 import Login from './views/Login.jsx'
 import Dashboard from './views/Dashboard.jsx'
 import SalaDetalle from './views/SalaDetalle.jsx'
+import AlumnoDetalle from './views/AlumnoDetalle.jsx'
 import Preguntas from './views/Preguntas.jsx'
 
 function ProtectedRoute({ children }) {
@@ -30,6 +31,9 @@ export default function App() {
           } />
           <Route path="/salas/:id" element={
             <ProtectedRoute><SalaDetalle /></ProtectedRoute>
+          } />
+          <Route path="/salas/:id/alumnos/:studentId" element={
+            <ProtectedRoute><AlumnoDetalle /></ProtectedRoute>
           } />
           <Route path="/preguntas" element={
             <ProtectedRoute><Preguntas /></ProtectedRoute>
