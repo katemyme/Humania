@@ -34,6 +34,25 @@ create table public.profiles (
   constraint username_len check (char_length(username::text) between 3 and 30)
 );
 
+-- 2.1 Códigos de institución: permiten que un docente se registre solo.
+--     RLS activo y SIN políticas — nadie puede leer ni escribir esta tabla
+--     desde el cliente. Solo el servidor (service_role, vía Edge Function
+--     registrar-docente) la toca.
+create table public.invitation_codes (
+  id           smallint generated always as identity primary key,
+  code         text not null unique,
+  institution  text not null,
+  grants_role  public.user_role not null default 'admin',
+  max_uses     integer not null default 50,
+  used_count   integer not null default 0,
+  is_active    boolean not null default true,
+  expires_at   timestamptz,
+  created_at   timestamptz not null default now(),
+  constraint uses_within_limit check (used_count <= max_uses)
+);
+
+alter table public.invitation_codes enable row level security;
+
 -- ---------------------------------------------------------------------
 -- 3. Contenido del juego
 -- ---------------------------------------------------------------------
@@ -171,9 +190,9 @@ create index idx_responses_question   on public.player_responses(question_id);
 -- ---------------------------------------------------------------------
 
 -- 7.1 Crea el perfil automáticamente al registrarse en Auth.
---     NOTA DE SEGURIDAD: aquí se toma el rol de los metadatos para permitir
---     que un docente se registre como 'admin'. En producción conviene
---     forzar 'usuario' por defecto y elevar el rol desde un panel controlado.
+--     El rol SIEMPRE nace 'usuario': el cliente no puede elevarlo.
+--     Solo la Edge Function registrar-docente puede subirlo a 'admin'
+--     (o el que otorgue el código), validando un invitation_codes válido.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -185,7 +204,7 @@ begin
     new.id,
     coalesce(new.raw_user_meta_data->>'username', split_part(coalesce(new.email,'user'), '@', 1)),
     new.raw_user_meta_data->>'full_name',
-    coalesce((new.raw_user_meta_data->>'role')::public.user_role, 'usuario')
+    'usuario'
   );
   return new;
 end;
@@ -194,6 +213,50 @@ $$;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- 7.1b Consume un código de institución (valida y descuenta un cupo, todo
+--      de una vez). Devuelve el rol que otorga, o falla con un mensaje claro.
+--      Solo el servidor la ejecuta (revocada para anon/authenticated).
+create or replace function public.consume_invitation_code(p_code text)
+returns public.user_role
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  v_role public.user_role;
+begin
+  update public.invitation_codes
+     set used_count = used_count + 1
+   where code = upper(trim(p_code))
+     and is_active = true
+     and (expires_at is null or expires_at > now())
+     and used_count < max_uses
+  returning grants_role into v_role;
+
+  if v_role is null then
+    raise exception 'Código de institución inválido, vencido o sin cupos disponibles';
+  end if;
+
+  return v_role;
+end;
+$$;
+
+revoke execute on function public.consume_invitation_code(text) from public;
+revoke execute on function public.consume_invitation_code(text) from anon, authenticated;
+
+-- 7.1c Devuelve un cupo si falla la creación de la cuenta a mitad de camino.
+create or replace function public.release_invitation_code(p_code text)
+returns void
+language sql
+security definer set search_path = public
+as $$
+  update public.invitation_codes
+     set used_count = greatest(used_count - 1, 0)
+   where code = upper(trim(p_code));
+$$;
+
+revoke execute on function public.release_invitation_code(text) from public;
+revoke execute on function public.release_invitation_code(text) from anon, authenticated;
 
 -- 7.2 Devuelve el rol del usuario actual sin recursión de RLS (security definer).
 create or replace function public.get_my_role()
@@ -406,6 +469,10 @@ create policy us_auditor_read on public.unlocked_skills for select to authentica
 -- ---------------------------------------------------------------------
 -- 9. Datos semilla (2 reinos, niveles, skills, una pregunta de ejemplo)
 -- ---------------------------------------------------------------------
+insert into public.invitation_codes (code, institution, grants_role, max_uses)
+values ('MINED-2025', 'MINED — Nicaragua', 'admin', 50)
+on conflict (code) do nothing;
+
 insert into public.kingdoms (code, name, theme, boss_name, color_hex, order_index) values
   ('verde','Reino Verde — Identidad','Identidad de género y autoconocimiento','El Estereotipo','#1F6F54',1),
   ('rojo' ,'Reino Rojo — Derechos'  ,'Derechos de la mujer y marco legal'    ,'La Ignorancia' ,'#9C2B2B',2);

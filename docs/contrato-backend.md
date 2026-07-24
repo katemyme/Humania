@@ -15,7 +15,7 @@ const supabase = createClient(
 
  Autenticación
 
-- Registro: se pasan `username`, `full_name` y `role` en los metadatos del usuario. Un trigger crea el perfil automáticamente en `profiles`.
+- Registro: todo usuario nace con rol `usuario` (el trigger lo fuerza, ya no lee `role` de los metadatos — antes cualquiera podía registrarse como `admin`). Un docente solo se vuelve `admin` a través de la Edge Function `registrar-docente` con un código de institución válido.
 - Login: email + contraseña. Los alumnos usan un email sintético interno (no se les pide correo real).
 - La confirmación por email está desactivada, así que los usuarios pueden entrar apenas se registran.
 
@@ -73,6 +73,18 @@ const { data, error } = await supabase.functions.invoke('reset-student-password'
 ```
 
 Valida por dentro que quien llama sea docente y que el alumno pertenezca a una de sus salas.
+
+`registrar-docente` — PÚBLICA (no requiere sesión, Verify JWT desactivado): crea la cuenta de un docente si el código de institución es válido, y le asigna el rol que otorgue el código (`invitation_codes.grants_role`, hoy siempre `admin`). NUNCA usar `supabase.auth.signUp` para esto: esa cuenta nacería `usuario` y no podría entrar al panel.
+
+```js
+const { data, error } = await supabase.functions.invoke('registrar-docente', {
+  body: { email, password, full_name, code }
+});
+// error trae el mensaje en español tal cual mostrarlo (código inválido, correo ya registrado, etc.)
+// data.ok === true si se creó — después hay que iniciar sesión con signInWithPassword
+```
+
+Código de prueba: `MINED-2025`.
 
  Nota de seguridad
 
