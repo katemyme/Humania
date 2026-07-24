@@ -108,7 +108,7 @@ export default function Register() {
             id="code"
             label="Código de institución"
             type="text"
-            placeholder="Ej: MINED-2025"
+            placeholder="Código proporcionado por tu institución"
             value={code}
             onChange={e => setCode(e.target.value)}
             autoComplete="off"
