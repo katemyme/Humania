@@ -89,3 +89,5 @@ Código de prueba: `MINED-2025`.
  Nota de seguridad
 
 La seguridad la aplican las políticas RLS dentro de la base de datos: cada rol solo ve y modifica lo que le corresponde. Los clientes no manejan permisos, solo hacen sus consultas con la clave pública.
+
+`profiles.role` no se puede cambiar desde ningún cliente (panel ni juego), ni siquiera actualizando la propia fila. Hay un trigger (`protect_profile_role`, `backend/migrations/0004_blindar_rol.sql`) que revierte en silencio cualquier intento de `update` sobre `role` que no venga de `service_role` o de una conexión administrativa. Si el juego necesita subir de rol a alguien (no debería), tiene que ser vía una Edge Function con la clave secreta, igual que `registrar-docente`.

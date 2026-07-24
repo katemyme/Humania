@@ -214,6 +214,44 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- 7.1a Blinda la columna role: RLS decide QUÉ FILAS puedes tocar, no QUÉ
+--      COLUMNAS, así que profiles_update_self por sí sola no evita que un
+--      alumno se autoasigne 'admin' en el mismo update donde toca su fila.
+--      Este trigger revierte el rol en silencio salvo que la conexión sea
+--      service_role o administrativa (SQL Editor / Table Editor).
+--      IMPORTANTE: NO marcar esta función como SECURITY DEFINER — si lo
+--      fuera, current_user pasaría a ser el dueño de la función y la
+--      comprobación daría permiso siempre, anulando la protección.
+create or replace function public.protect_profile_role()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_jwt_role text;
+begin
+  if new.role is distinct from old.role then
+
+    v_jwt_role := coalesce(
+      nullif(current_setting('request.jwt.claims', true), '')::json ->> 'role',
+      ''
+    );
+
+    if v_jwt_role <> 'service_role'
+       and current_user not in ('service_role', 'postgres', 'supabase_admin')
+    then
+      new.role := old.role;
+    end if;
+
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger trg_protect_profile_role
+  before update on public.profiles
+  for each row execute function public.protect_profile_role();
+
 -- 7.1b Consume un código de institución (valida y descuenta un cupo, todo
 --      de una vez). Devuelve el rol que otorga, o falla con un mensaje claro.
 --      Solo el servidor la ejecuta (revocada para anon/authenticated).
@@ -364,7 +402,7 @@ alter table public.unlocked_skills   enable row level security;
 create policy profiles_select on public.profiles for select to authenticated
   using ( id = auth.uid() or public.get_my_role() in ('admin','auditor') );
 create policy profiles_update_self on public.profiles for update to authenticated
-  using ( id = auth.uid() );
+  using ( id = auth.uid() ) with check ( id = auth.uid() );
 
 -- 8.2 Contenido base (reinos, niveles, skills): lo lee cualquier autenticado;
 --     solo un admin puede modificarlo.
