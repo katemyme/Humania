@@ -90,9 +90,11 @@ const PREGUNTA_SELECT = `
   kingdom_id,
   level_id,
   author_id,
+  group_id,
   type,
   prompt,
   created_at,
+  groups(name),
   question_options(id, content, is_correct, correct_order, order_index)
 `
 
@@ -102,6 +104,8 @@ function mapPregunta(q) {
     kingdomId: q.kingdom_id,
     levelId: q.level_id,
     authorId: q.author_id,
+    groupId: q.group_id,
+    salaNombre: q.groups?.name ?? null,
     tipo: q.type,
     prompt: q.prompt,
     opciones: (q.question_options ?? [])
@@ -156,10 +160,10 @@ async function replaceOpciones(questionId, opciones) {
   if (error) throw new Error(friendlyDbError(error))
 }
 
-export async function createPregunta(authorId, { kingdomId, tipo, prompt, opciones }) {
+export async function createPregunta(authorId, { kingdomId, groupId, tipo, prompt, opciones }) {
   const { data: inserted, error } = await supabase
     .from('questions')
-    .insert({ author_id: authorId, kingdom_id: kingdomId, type: tipo, prompt })
+    .insert({ author_id: authorId, kingdom_id: kingdomId, group_id: groupId, type: tipo, prompt })
     .select('id')
     .single()
 
@@ -169,10 +173,10 @@ export async function createPregunta(authorId, { kingdomId, tipo, prompt, opcion
   return getPregunta(inserted.id)
 }
 
-export async function updatePregunta(id, { kingdomId, tipo, prompt, opciones }) {
+export async function updatePregunta(id, { kingdomId, groupId, tipo, prompt, opciones }) {
   const { error } = await supabase
     .from('questions')
-    .update({ kingdom_id: kingdomId, type: tipo, prompt })
+    .update({ kingdom_id: kingdomId, group_id: groupId, type: tipo, prompt })
     .eq('id', id)
 
   if (error) throw new Error(friendlyDbError(error))

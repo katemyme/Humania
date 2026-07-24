@@ -32,7 +32,11 @@ export default function PreguntaCard({ pregunta, kingdom, isOwn, isAuditor, onEd
           </span>
         )}
         <span className={styles.tipo}>{TIPO_LABELS[pregunta.tipo] ?? pregunta.tipo}</span>
-        {!isOwn && <span className={styles.soloLectura}>Contenido base · solo lectura</span>}
+        {pregunta.groupId == null ? (
+          <span className={styles.soloLectura}>Contenido base · solo lectura</span>
+        ) : (
+          <span className={styles.sala}>Sala: {pregunta.salaNombre ?? '—'}</span>
+        )}
       </div>
 
       <p className={styles.prompt}>{pregunta.prompt}</p>

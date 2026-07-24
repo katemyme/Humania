@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Modal from '../components/Modal.jsx'
 import Button from '../components/Button.jsx'
-import { getKingdoms } from '../data/api.js'
+import { getKingdoms, getSalas } from '../data/api.js'
 import styles from './PreguntaFormModal.module.css'
 
 const TIPOS = [
@@ -22,7 +22,10 @@ function emptyOpcion() {
 export default function PreguntaFormModal({ initial, onClose, onSave }) {
   const [kingdoms, setKingdoms] = useState([])
   const [kingdomsLoading, setKingdomsLoading] = useState(true)
+  const [salas, setSalas] = useState([])
+  const [salasLoading, setSalasLoading] = useState(true)
   const [kingdomId, setKingdomId] = useState(initial?.kingdomId ?? '')
+  const [groupId, setGroupId] = useState(initial?.groupId ?? '')
   const [tipo, setTipo] = useState(initial?.tipo ?? 'dilema')
   const [prompt, setPrompt] = useState(initial?.prompt ?? '')
   const [opciones, setOpciones] = useState(
@@ -41,6 +44,19 @@ export default function PreguntaFormModal({ initial, onClose, onSave }) {
       })
       .catch(() => { if (active) setError('No se pudieron cargar los reinos.') })
       .finally(() => { if (active) setKingdomsLoading(false) })
+    return () => { active = false }
+  }, [])
+
+  useEffect(() => {
+    let active = true
+    getSalas()
+      .then(data => {
+        if (!active) return
+        setSalas(data)
+        setGroupId(prev => prev || data[0]?.id || '')
+      })
+      .catch(() => { if (active) setError('No se pudieron cargar tus salas.') })
+      .finally(() => { if (active) setSalasLoading(false) })
     return () => { active = false }
   }, [])
 
@@ -71,11 +87,12 @@ export default function PreguntaFormModal({ initial, onClose, onSave }) {
       return
     }
     if (!kingdomId) { setError('Selecciona un reino.'); return }
+    if (!groupId) { setError('Selecciona una sala.'); return }
 
     setError('')
     setSubmitting(true)
     try {
-      await onSave({ kingdomId, tipo, prompt: trimmedPrompt, opciones: validOpciones })
+      await onSave({ kingdomId, groupId, tipo, prompt: trimmedPrompt, opciones: validOpciones })
     } catch (err) {
       setError(err.message || 'No se pudo guardar la pregunta. Inténtalo de nuevo.')
     } finally {
@@ -99,6 +116,25 @@ export default function PreguntaFormModal({ initial, onClose, onSave }) {
           >
             {kingdoms.map(k => (
               <option key={k.id} value={k.id}>{k.name}</option>
+            ))}
+          </select>
+        )}
+      </label>
+
+      <label className={styles.field}>
+        <span className={styles.label}>Sala</span>
+        {salasLoading ? (
+          <p className={styles.hint}>Cargando tus salas…</p>
+        ) : salas.length === 0 ? (
+          <p className={styles.hint}>Primero crea una sala en "Mis salas" para poder agregarle preguntas.</p>
+        ) : (
+          <select
+            className={styles.input}
+            value={groupId}
+            onChange={e => setGroupId(e.target.value)}
+          >
+            {salas.map(s => (
+              <option key={s.id} value={s.id}>{s.nombre}</option>
             ))}
           </select>
         )}
@@ -174,7 +210,7 @@ export default function PreguntaFormModal({ initial, onClose, onSave }) {
 
       <div className={styles.actions}>
         <Button variant="ghost" onClick={onClose} disabled={submitting}>Cancelar</Button>
-        <Button variant="confirm" onClick={handleSubmit} disabled={submitting}>
+        <Button variant="confirm" onClick={handleSubmit} disabled={submitting || salas.length === 0}>
           {submitting ? 'Guardando…' : 'Guardar'}
         </Button>
       </div>

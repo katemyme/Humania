@@ -44,6 +44,16 @@
   font-style: italic;
 }
 
+.sala {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-azul-oscuro);
+  background: var(--color-azul-badge-fondo);
+  padding: 5px 10px;
+  border-radius: var(--radio-pill);
+}
+
 .prompt {
   font-family: var(--font-titulo);
   font-weight: 600;
