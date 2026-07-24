@@ -1,7 +1,5 @@
 // Única puerta de entrada a los datos.
 import { supabase } from '../supabaseClient.js'
-import { SALAS } from './mock/salas.js'
-import { ALUMNOS_BY_SALA } from './mock/alumnos.js'
 
 function friendlyDbError(error) {
   if (!error) return 'Ocurrió un error inesperado.'
@@ -190,13 +188,183 @@ export async function deletePregunta(id) {
   if (error) throw new Error(friendlyDbError(error))
 }
 
-// --- Detalle de sala: aún no conectado a Supabase, sigue usando datos de ejemplo.
-let _salas = [...SALAS]
+export async function getSalaById(id) {
+  const { data, error } = await supabase
+    .from('groups')
+    .select('id, name, join_code, is_active')
+    .eq('id', id)
+    .single()
 
-export async function getSala(id) {
-  return _salas.find(s => String(s.id) === String(id)) ?? null
+  if (error) throw new Error(friendlyDbError(error))
+  return { id: data.id, nombre: data.name, codigo: data.join_code, activa: data.is_active }
 }
 
-export async function getSalaAlumnos(id) {
-  return ALUMNOS_BY_SALA[Number(id)] ?? []
+function buildReporte({ kingdoms, members, progress, responses, levelsPorReino }) {
+  const alumnos = members.map(m => {
+    const studentId = m.student_id
+    const perfil = m.profiles
+    const porReino = {}
+    for (const k of kingdoms) {
+      const p = progress.find(pr => pr.student_id === studentId && pr.kingdom_id === k.id)
+      porReino[k.id] = {
+        crystalEarned: p?.crystal_earned ?? false,
+        levelsDone: p?.levels_done ?? 0,
+        totalLevels: levelsPorReino[k.id] ?? 0,
+        score: p?.score ?? 0,
+      }
+    }
+    const misRespuestas = responses.filter(r => r.student_id === studentId)
+    const totalRespuestas = misRespuestas.length
+    const correctas = misRespuestas.filter(r => r.is_correct).length
+    const ultimaActividad = misRespuestas.reduce(
+      (max, r) => (!max || r.answered_at > max ? r.answered_at : max),
+      null
+    )
+
+    return {
+      id: studentId,
+      nombre: perfil?.full_name || perfil?.username || 'Alumno',
+      porReino,
+      totalRespuestas,
+      correctas,
+      pctAciertos: totalRespuestas ? Math.round((correctas / totalRespuestas) * 100) : 0,
+      ultimaActividad,
+    }
+  })
+
+  const resumenPorReino = {}
+  for (const k of kingdoms) {
+    const empezaron = alumnos.filter(
+      a => a.porReino[k.id]?.levelsDone > 0 || a.porReino[k.id]?.crystalEarned
+    ).length
+    const terminaron = alumnos.filter(a => a.porReino[k.id]?.crystalEarned).length
+    resumenPorReino[k.id] = { kingdom: k, empezaron, terminaron }
+  }
+
+  const totalRespuestasGlobal = responses.length
+  const correctasGlobal = responses.filter(r => r.is_correct).length
+  const pctAciertosGeneral = totalRespuestasGlobal
+    ? Math.round((correctasGlobal / totalRespuestasGlobal) * 100)
+    : 0
+
+  const porPregunta = {}
+  for (const r of responses) {
+    const qId = r.question_id
+    if (!porPregunta[qId]) {
+      porPregunta[qId] = {
+        questionId: qId,
+        prompt: r.questions?.prompt ?? '(pregunta eliminada)',
+        kingdomId: r.questions?.kingdom_id ?? null,
+        total: 0,
+        correctas: 0,
+      }
+    }
+    porPregunta[qId].total += 1
+    if (r.is_correct) porPregunta[qId].correctas += 1
+  }
+  const preguntas = Object.values(porPregunta)
+    .map(p => ({ ...p, pctError: Math.round(((p.total - p.correctas) / p.total) * 100) }))
+    .sort((a, b) => b.pctError - a.pctError)
+
+  return {
+    kingdoms,
+    alumnos,
+    resumenPorReino,
+    totalAlumnos: alumnos.length,
+    pctAciertosGeneral,
+    preguntas,
+  }
+}
+
+export async function getReporteSala(groupId) {
+  const [
+    { data: gk, error: gkError },
+    { data: members, error: memError },
+    { data: progress, error: progError },
+    { data: responses, error: respError },
+  ] = await Promise.all([
+    supabase.from('group_kingdoms').select('kingdom_id, kingdoms(id, code, name)').eq('group_id', groupId),
+    supabase.from('group_members').select('student_id, profiles(id, username, full_name)').eq('group_id', groupId),
+    supabase
+      .from('player_progress')
+      .select('student_id, kingdom_id, crystal_earned, levels_done, score')
+      .eq('group_id', groupId),
+    supabase
+      .from('player_responses')
+      .select('student_id, question_id, is_correct, answered_at, questions(prompt, kingdom_id)')
+      .eq('group_id', groupId),
+  ])
+
+  if (gkError) throw new Error(friendlyDbError(gkError))
+  if (memError) throw new Error(friendlyDbError(memError))
+  if (progError) throw new Error(friendlyDbError(progError))
+  if (respError) throw new Error(friendlyDbError(respError))
+
+  const kingdoms = gk.map(x => x.kingdoms).filter(Boolean)
+  const kingdomIds = kingdoms.map(k => k.id)
+
+  const levelsPorReino = {}
+  if (kingdomIds.length) {
+    const { data: levels, error: levelsError } = await supabase
+      .from('levels')
+      .select('kingdom_id')
+      .in('kingdom_id', kingdomIds)
+
+    if (levelsError) throw new Error(friendlyDbError(levelsError))
+    for (const l of levels) {
+      levelsPorReino[l.kingdom_id] = (levelsPorReino[l.kingdom_id] ?? 0) + 1
+    }
+  }
+
+  return buildReporte({ kingdoms, members, progress, responses, levelsPorReino })
+}
+
+export async function getAlumnoResumen(groupId, studentId) {
+  const [
+    { data: perfil, error: perfilError },
+    { data: progress, error: progError },
+  ] = await Promise.all([
+    supabase.from('profiles').select('id, username, full_name').eq('id', studentId).single(),
+    supabase
+      .from('player_progress')
+      .select('kingdom_id, crystal_earned, levels_done, score, kingdoms(name, code)')
+      .eq('group_id', groupId)
+      .eq('student_id', studentId),
+  ])
+
+  if (perfilError) throw new Error(friendlyDbError(perfilError))
+  if (progError) throw new Error(friendlyDbError(progError))
+
+  return {
+    id: perfil.id,
+    nombre: perfil.full_name || perfil.username,
+    porReino: progress.map(p => ({
+      kingdomId: p.kingdom_id,
+      nombre: p.kingdoms?.name,
+      code: p.kingdoms?.code,
+      crystalEarned: p.crystal_earned,
+      levelsDone: p.levels_done,
+      score: p.score,
+    })),
+  }
+}
+
+export async function getAlumnoRespuestas(groupId, studentId) {
+  const { data, error } = await supabase
+    .from('player_responses')
+    .select('id, is_correct, answered_at, questions(prompt, type), question_options(content)')
+    .eq('group_id', groupId)
+    .eq('student_id', studentId)
+    .order('answered_at', { ascending: false })
+
+  if (error) throw new Error(friendlyDbError(error))
+
+  return data.map(r => ({
+    id: r.id,
+    prompt: r.questions?.prompt ?? '(pregunta eliminada)',
+    tipo: r.questions?.type,
+    opcionElegida: r.question_options?.content ?? null,
+    correcta: r.is_correct,
+    fecha: r.answered_at,
+  }))
 }

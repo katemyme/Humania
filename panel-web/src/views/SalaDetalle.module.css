@@ -43,12 +43,6 @@
   font-weight: 700;
   font-size: 30px;
   color: var(--color-azul-oscuro);
-  margin: 0 0 4px 0;
-}
-
-.grado {
-  font-size: 15px;
-  color: var(--color-texto-secundario);
   margin: 0;
 }
 
@@ -58,7 +52,13 @@
   gap: 16px;
 }
 
-.controls {
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,43 +66,25 @@
   gap: 14px;
 }
 
-.tabs {
-  display: flex;
-  gap: 8px;
-}
-
-.tab {
-  height: 40px;
-  padding: 0 18px;
-  border-radius: var(--radio-sm);
+.sectionTitle {
   font-family: var(--font-titulo);
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-azul-oscuro);
+  margin: 0;
 }
-.tab:hover { background: var(--color-azul-badge-fondo); }
 
-.tabInactive {
-  border-color: var(--color-borde);
-  background: var(--color-blanco);
-  color: var(--color-azul-oscuro);
+.sectionControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.tabTodos {
-  border-color: var(--color-azul);
-  background: var(--color-azul-badge-fondo);
-  color: var(--color-azul-oscuro);
-}
-.tabVerde {
-  border-color: var(--color-verde);
-  background: var(--color-verde-fondo);
-  color: var(--color-verde-texto);
-}
-.tabRojo {
-  border-color: var(--color-rojo);
-  background: var(--color-rojo-fondo);
-  color: var(--color-rojo-texto);
+
+/* Button trae `.outline` con width:100% por defecto; en este layout en fila
+   necesita ancho de contenido, no ocupar todo el espacio disponible. */
+.exportBtn {
+  width: auto !important;
+  flex-shrink: 0;
 }
 
 .search {
