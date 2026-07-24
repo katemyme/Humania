@@ -37,6 +37,36 @@
   box-shadow: 0 0 0 3px rgba(253, 205, 16, 0.35);
 }
 
+.hint {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.kingdoms {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kingdomOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-texto);
+  border: 2px solid var(--color-borde);
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--color-rojo-texto);
+  margin: 0;
+}
+
 .actions {
   display: flex;
   gap: 10px;

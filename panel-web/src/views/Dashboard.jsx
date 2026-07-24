@@ -8,27 +8,35 @@ import Button from '../components/Button.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useSalas } from '../hooks/useSalas.js'
 import { useToast } from '../hooks/useToast.js'
-import { calcAvancePromedio } from '../utils/stats.js'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
-  const { isAuditor } = useAuth()
-  const { salas, loading, createSala } = useSalas()
+  const { user, isAuditor } = useAuth()
+  const { salas, loading, error, createSala, toggleActiva } = useSalas()
   const { toast, showToast } = useToast()
   const [showModal, setShowModal] = useState(false)
 
+  const salasActivas = salas.filter(s => s.activa).length
   const totalAlumnos = salas.reduce((a, s) => a + s.alumnos, 0)
-  const avgProgreso = calcAvancePromedio(salas)
 
   // RoomCodeChip ya escribe al portapapeles internamente; aquí solo mostramos toast.
   function handleCopy(codigo) {
     showToast(`Código ${codigo} copiado`)
   }
 
-  async function handleCreate(nombre) {
-    const sala = await createSala(nombre)
+  async function handleCreate(nombre, kingdomIds) {
+    const sala = await createSala(user.id, nombre, kingdomIds)
     setShowModal(false)
     showToast(`Sala creada: ${sala.codigo}`)
+  }
+
+  async function handleToggleActiva(sala) {
+    try {
+      await toggleActiva(sala.id, !sala.activa)
+      showToast(sala.activa ? 'Sala desactivada' : 'Sala activada')
+    } catch (err) {
+      showToast(err.message)
+    }
   }
 
   return (
@@ -51,17 +59,25 @@ export default function Dashboard() {
         </div>
 
         <div className={styles.statsGrid}>
-          <StatCard value={salas.length} label="Salas activas" />
-          <StatCard value={totalAlumnos}   label="Alumnos totales" />
-          <StatCard value={`${avgProgreso}%`} label="Avance promedio" />
+          <StatCard value={salasActivas} label="Salas activas" />
+          <StatCard value={totalAlumnos} label="Alumnos totales" />
         </div>
 
         {loading ? (
           <p className={styles.loading}>Cargando salas…</p>
+        ) : error ? (
+          <p className={styles.error}>{error}</p>
+        ) : salas.length === 0 ? (
+          <p className={styles.empty}>Aún no tienes salas. Crea la primera con el botón de arriba.</p>
         ) : (
           <div className={styles.salasGrid}>
             {salas.map(sala => (
-              <SalaCard key={sala.id} sala={sala} onCopy={handleCopy} />
+              <SalaCard
+                key={sala.id}
+                sala={sala}
+                onCopy={handleCopy}
+                onToggleActiva={handleToggleActiva}
+              />
             ))}
           </div>
         )}

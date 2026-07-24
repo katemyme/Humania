@@ -26,10 +26,16 @@
   margin: 0 0 4px 0;
 }
 
-.grado {
-  font-size: 13px;
-  color: var(--color-texto-secundario);
+.estado {
+  display: inline-block;
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: var(--radio-pill);
 }
+.estadoActiva { background: var(--color-verde-suave); color: #166534; }
+.estadoInactiva { background: var(--color-borde); color: var(--color-texto-secundario); }
 
 .reinos {
   display: flex;
@@ -53,16 +59,14 @@
 .verde { background: var(--color-verde-suave); color: #166534; }
 .rojo  { background: var(--color-rojo-suave);  color: #991B1B; }
 
-.progreso {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.progresoMeta {
-  display: flex;
-  justify-content: space-between;
+.alumnos {
   font-size: 13px;
   color: var(--color-texto-secundario);
+  margin: 0;
 }
-.progresoMeta span:last-child { font-weight: 600; }
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

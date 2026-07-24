@@ -55,3 +55,18 @@
   color: var(--color-texto-secundario);
   font-size: 14px;
 }
+
+.error {
+  color: var(--color-rojo-texto);
+  font-size: 14px;
+}
+
+.empty {
+  color: var(--color-texto-secundario);
+  font-size: 14px;
+  background: var(--color-blanco);
+  border: 2px dashed var(--color-borde);
+  border-radius: var(--radio-lg);
+  padding: 32px;
+  text-align: center;
+}
