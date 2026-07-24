@@ -84,8 +84,6 @@ const { data, error } = await supabase.functions.invoke('registrar-docente', {
 // data.ok === true si se creó — después hay que iniciar sesión con signInWithPassword
 ```
 
-Código de prueba: `MINED-2025`.
-
  Nota de seguridad
 
 La seguridad la aplican las políticas RLS dentro de la base de datos: cada rol solo ve y modifica lo que le corresponde. Los clientes no manejan permisos, solo hacen sus consultas con la clave pública.
