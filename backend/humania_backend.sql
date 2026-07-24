@@ -195,6 +195,24 @@ as $$
   select role from public.profiles where id = auth.uid();
 $$;
 
+-- 7.2b Evitan la recursión entre las políticas de groups y group_members
+--      (groups_member_read consulta group_members y gm_teacher consulta groups).
+create or replace function public.is_group_teacher(p_group_id uuid)
+returns boolean
+language sql stable
+security definer set search_path = public
+as $$
+  select exists (select 1 from public.groups g where g.id = p_group_id and g.teacher_id = auth.uid());
+$$;
+
+create or replace function public.is_group_member(p_group_id uuid)
+returns boolean
+language sql stable
+security definer set search_path = public
+as $$
+  select exists (select 1 from public.group_members m where m.group_id = p_group_id and m.student_id = auth.uid());
+$$;
+
 -- 7.3 Genera un código de sala único (sin caracteres ambiguos).
 create or replace function public.generate_join_code()
 returns text
@@ -305,7 +323,7 @@ create policy qoptions_author on public.question_options for all to authenticate
 create policy groups_teacher on public.groups for all to authenticated
   using ( teacher_id = auth.uid() ) with check ( teacher_id = auth.uid() );
 create policy groups_member_read on public.groups for select to authenticated
-  using ( exists (select 1 from public.group_members m where m.group_id = id and m.student_id = auth.uid()) );
+  using ( public.is_group_member(id) );
 create policy groups_auditor_read on public.groups for select to authenticated
   using ( public.get_my_role() = 'auditor' );
 
@@ -327,8 +345,8 @@ create policy gm_student_read on public.group_members for select to authenticate
 create policy gm_student_leave on public.group_members for delete to authenticated
   using ( student_id = auth.uid() );
 create policy gm_teacher on public.group_members for all to authenticated
-  using ( exists (select 1 from public.groups g where g.id = group_id and g.teacher_id = auth.uid()) )
-  with check ( exists (select 1 from public.groups g where g.id = group_id and g.teacher_id = auth.uid()) );
+  using ( public.is_group_teacher(group_id) )
+  with check ( public.is_group_teacher(group_id) );
 create policy gm_auditor_read on public.group_members for select to authenticated
   using ( public.get_my_role() = 'auditor' );
 
