@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Selector.unity
     guid: 5a13618f62e86954dbc07e4afa61a32b
+  - enabled: 1
+    path: Assets/Scenes/Bosque_Empatia.unity
+    guid: 9b4df33a8265cd74ba9dc8ebd18b1431
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

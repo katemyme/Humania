@@ -5,6 +5,9 @@ public class load_world_selector : MonoBehaviour
 {
     [SerializeField] private Camera cam;
 
+    [SerializeField] private GameObject MainMenu;
+    [SerializeField] private GameObject LoadingScreen;
+
     private void Update()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -31,6 +34,10 @@ public class load_world_selector : MonoBehaviour
     private void LoadScene()
     {
         // Carga la escena de seleccion de mundo
+
+        MainMenu.SetActive(false);
+        LoadingScreen.SetActive(true);
+
         UnityEngine.SceneManagement.SceneManager.LoadScene("World_Selector");
     }
 }
