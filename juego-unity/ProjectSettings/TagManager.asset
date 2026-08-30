@@ -44,6 +44,9 @@ TagManager:
   - name: GroundPalette
     uniqueID: 3428465817
     locked: 0
+  - name: WalkInFront
+    uniqueID: 1504595591
+    locked: 0
   - name: Collision
     uniqueID: 3083739041
     locked: 0
