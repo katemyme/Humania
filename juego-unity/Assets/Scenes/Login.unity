@@ -773,6 +773,8 @@ MonoBehaviour:
   campoUsuario: {fileID: 1266051435}
   campoContrasena: {fileID: 1935614835}
   campoCodigo: {fileID: 1629783464}
+  Menu: {fileID: 1512630910}
+  LoadingScreen: {fileID: 1707285722}
 --- !u!1 &1230330106
 GameObject:
   m_ObjectHideFlags: 0

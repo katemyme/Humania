@@ -1,6 +1,7 @@
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class PantallaLogin : MonoBehaviour
@@ -14,6 +15,11 @@ public class PantallaLogin : MonoBehaviour
     [System.Serializable] class RespLogin { public string access_token; public User user; }
     [System.Serializable] class User { public string id; }
     [System.Serializable] class CuerpoSala { public string p_code; }
+
+    [SerializeField] private GameObject Menu;
+    [SerializeField] private GameObject LoadingScreen;
+
+    private string scene_name = "Title_screen";
 
     bool enviando = false;
 
@@ -102,9 +108,18 @@ public class PantallaLogin : MonoBehaviour
             Sesion.GroupId = req.downloadHandler.text.Trim().Trim('"');
         }
 
+        LoadScene(scene_name);
+
         Debug.Log("¡Listo! Entraste a la sala. Alumno: " + Sesion.UserId + " · Sala: " + Sesion.GroupId);
         // Aquí después cargamos la siguiente escena (el hub del juego)
 
         enviando = false;
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        Menu.SetActive(false);
+        LoadingScreen.SetActive(true);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }
