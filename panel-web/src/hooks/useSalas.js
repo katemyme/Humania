@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { getSalas, createSala as apiCreateSala, setSalaActiva as apiSetSalaActiva } from '../data/api.js'
+import {
+  getSalas,
+  createSala as apiCreateSala,
+  setSalaActiva as apiSetSalaActiva,
+  deleteSala as apiDeleteSala,
+} from '../data/api.js'
 
 export function useSalas() {
   const [salas, setSalas] = useState([])
@@ -32,5 +37,10 @@ export function useSalas() {
     setSalas(prev => prev.map(s => (s.id === id ? { ...s, activa } : s)))
   }, [])
 
-  return { salas, loading, error, createSala, toggleActiva }
+  const deleteSala = useCallback(async id => {
+    await apiDeleteSala(id)
+    setSalas(prev => prev.filter(s => s.id !== id))
+  }, [])
+
+  return { salas, loading, error, createSala, toggleActiva, deleteSala }
 }

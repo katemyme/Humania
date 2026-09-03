@@ -5,10 +5,12 @@ import Button from '../components/Button.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import styles from './SalaCard.module.css'
 
-export default function SalaCard({ sala, onCopy, onToggleActiva }) {
+export default function SalaCard({ sala, onCopy, onToggleActiva, onDelete }) {
   const navigate = useNavigate()
   const { isAuditor } = useAuth()
   const [toggling, setToggling] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   async function handleToggle() {
     setToggling(true)
@@ -16,6 +18,16 @@ export default function SalaCard({ sala, onCopy, onToggleActiva }) {
       await onToggleActiva(sala)
     } finally {
       setToggling(false)
+    }
+  }
+
+  async function handleConfirmDelete() {
+    setDeleting(true)
+    try {
+      await onDelete(sala)
+    } finally {
+      setDeleting(false)
+      setConfirming(false)
     }
   }
 
@@ -47,10 +59,31 @@ export default function SalaCard({ sala, onCopy, onToggleActiva }) {
         <Button variant="outline" onClick={() => navigate(`/salas/${sala.id}`)}>
           Ver detalle
         </Button>
-        {!isAuditor && (
+        {!isAuditor && !confirming && (
           <Button variant="ghost" onClick={handleToggle} disabled={toggling}>
             {toggling ? 'Guardando…' : sala.activa ? 'Desactivar sala' : 'Activar sala'}
           </Button>
+        )}
+        {!isAuditor && (
+          confirming ? (
+            <div className={styles.confirmRow}>
+              <p className={styles.confirmText}>
+                Se eliminará la sala y todo su progreso. Esta acción no se puede deshacer.
+              </p>
+              <div className={styles.confirmActions}>
+                <Button variant="ghost" onClick={() => setConfirming(false)} disabled={deleting}>
+                  Cancelar
+                </Button>
+                <Button variant="confirm" onClick={handleConfirmDelete} disabled={deleting}>
+                  {deleting ? 'Eliminando…' : 'Confirmar borrado'}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button variant="ghost" onClick={() => setConfirming(true)}>
+              Eliminar sala
+            </Button>
+          )
         )}
       </div>
     </div>

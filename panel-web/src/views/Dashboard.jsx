@@ -12,7 +12,7 @@ import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   const { user, isAuditor } = useAuth()
-  const { salas, loading, error, createSala, toggleActiva } = useSalas()
+  const { salas, loading, error, createSala, toggleActiva, deleteSala } = useSalas()
   const { toast, showToast } = useToast()
   const [showModal, setShowModal] = useState(false)
 
@@ -34,6 +34,15 @@ export default function Dashboard() {
     try {
       await toggleActiva(sala.id, !sala.activa)
       showToast(sala.activa ? 'Sala desactivada' : 'Sala activada')
+    } catch (err) {
+      showToast(err.message)
+    }
+  }
+
+  async function handleDelete(sala) {
+    try {
+      await deleteSala(sala.id)
+      showToast(`Sala "${sala.nombre}" eliminada`)
     } catch (err) {
       showToast(err.message)
     }
@@ -77,6 +86,7 @@ export default function Dashboard() {
                 sala={sala}
                 onCopy={handleCopy}
                 onToggleActiva={handleToggleActiva}
+                onDelete={handleDelete}
               />
             ))}
           </div>

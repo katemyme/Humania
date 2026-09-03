@@ -106,6 +106,11 @@ export async function setSalaActiva(id, activa) {
   if (error) throw new Error(friendlyDbError(error))
 }
 
+export async function deleteSala(id) {
+  const { error } = await supabase.from('groups').delete().eq('id', id)
+  if (error) throw new Error(friendlyDbError(error))
+}
+
 const PREGUNTA_SELECT = `
   id,
   kingdom_id,

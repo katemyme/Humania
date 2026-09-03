@@ -70,3 +70,21 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.confirmRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirmText {
+  font-size: 13px;
+  color: var(--color-rojo-texto);
+  margin: 0;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+.confirmActions > * { flex: 1; }
