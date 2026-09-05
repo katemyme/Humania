@@ -1,20 +1,26 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class menu_controller : MonoBehaviour
 {
     public GameObject MenuCanva;
     private bool isPaused = false;
 
+    [SerializeField] private Button resumeButton;
+
     void Start()
     {
         MenuCanva.SetActive(false);
         isPaused = false;
+        Resume();
     }
 
     // Update is called once per frame
     void Update()
     {
+        resumeButton.onClick.AddListener(Resume);
+
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (isPaused) Resume();
