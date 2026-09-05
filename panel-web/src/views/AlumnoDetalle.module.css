@@ -1,0 +1,115 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-fondo);
+}
+
+.main {
+  flex: 1;
+  padding: 40px;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.backLink {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-texto-secundario);
+  padding: 0;
+  transition: color 0.15s;
+}
+.backLink:hover { color: var(--color-azul-oscuro); }
+
+.heading {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--color-azul-oscuro);
+  margin: 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-azul-oscuro);
+  margin: 0;
+}
+
+.table {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  overflow: hidden;
+}
+
+.thead {
+  display: grid;
+  grid-template-columns: 2.5fr 1.3fr 1fr 1.2fr;
+  padding: 14px 24px;
+  background: var(--color-fondo);
+  border-bottom: 2px solid var(--color-borde);
+}
+.thead span {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2.5fr 1.3fr 1fr 1.2fr;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 14px;
+  color: var(--color-texto);
+}
+.row:last-child { border-bottom: none; }
+
+.prompt { font-weight: 600; }
+
+.resultado { font-weight: 600; font-size: 13px; }
+.correcto { color: var(--color-verde-texto); }
+.incorrecto { color: var(--color-rojo-texto); }
+
+.fecha {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+}
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-placeholder);
+  font-size: 14px;
+  background: var(--color-blanco);
+  border: 2px dashed var(--color-borde);
+  border-radius: var(--radio-lg);
+}
+
+.loadingMsg {
+  padding: 40px;
+  color: var(--color-texto-secundario);
+  font-size: 14px;
+}

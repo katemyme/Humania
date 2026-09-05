@@ -1,0 +1,32 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.label {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-azul-oscuro);
+}
+
+.input {
+  height: 52px;
+  border-radius: 14px;
+  border: 2px solid var(--color-borde);
+  padding: 0 16px;
+  font-family: var(--font-cuerpo);
+  font-size: 15px;
+  color: var(--color-texto);
+  background: var(--color-blanco);
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.input::placeholder { color: var(--color-placeholder); }
+.input:focus {
+  border-color: var(--color-amarillo);
+  box-shadow: 0 0 0 3px rgba(253, 205, 16, 0.35);
+}

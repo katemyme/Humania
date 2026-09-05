@@ -1,0 +1,114 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-fondo);
+}
+
+.main {
+  flex: 1;
+  padding: 40px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.backLink {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+}
+.backLink:hover { color: var(--color-azul-oscuro); }
+
+.salaHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.heading {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 30px;
+  color: var(--color-azul-oscuro);
+  margin: 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.sectionTitle {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-azul-oscuro);
+  margin: 0;
+}
+
+.sectionControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Button trae `.outline` con width:100% por defecto; en este layout en fila
+   necesita ancho de contenido, no ocupar todo el espacio disponible. */
+.exportBtn {
+  width: auto !important;
+  flex-shrink: 0;
+}
+
+.search {
+  height: 44px;
+  width: 220px;
+  border-radius: 14px;
+  border: 2px solid var(--color-borde);
+  padding: 0 16px;
+  font-family: var(--font-cuerpo);
+  font-size: 14px;
+  color: var(--color-texto);
+  background: var(--color-blanco);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search::placeholder { color: var(--color-placeholder); }
+.search:focus {
+  border-color: var(--color-amarillo);
+  box-shadow: 0 0 0 3px rgba(253, 205, 16, 0.35);
+}
+
+.loadingMsg {
+  padding: 40px;
+  color: var(--color-texto-secundario);
+  font-size: 14px;
+}

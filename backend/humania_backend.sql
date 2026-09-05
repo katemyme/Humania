@@ -34,6 +34,25 @@ create table public.profiles (
   constraint username_len check (char_length(username::text) between 3 and 30)
 );
 
+-- 2.1 Códigos de institución: permiten que un docente se registre solo.
+--     RLS activo y SIN políticas — nadie puede leer ni escribir esta tabla
+--     desde el cliente. Solo el servidor (service_role, vía Edge Function
+--     registrar-docente) la toca.
+create table public.invitation_codes (
+  id           smallint generated always as identity primary key,
+  code         text not null unique,
+  institution  text not null,
+  grants_role  public.user_role not null default 'admin',
+  max_uses     integer not null default 50,
+  used_count   integer not null default 0,
+  is_active    boolean not null default true,
+  expires_at   timestamptz,
+  created_at   timestamptz not null default now(),
+  constraint uses_within_limit check (used_count <= max_uses)
+);
+
+alter table public.invitation_codes enable row level security;
+
 -- ---------------------------------------------------------------------
 -- 3. Contenido del juego
 -- ---------------------------------------------------------------------
@@ -70,6 +89,8 @@ create table public.questions (
   kingdom_id   smallint not null references public.kingdoms(id) on delete cascade,
   level_id     integer references public.levels(id) on delete set null,
   author_id    uuid references public.profiles(id) on delete set null,  -- null = contenido base
+  -- group_id se agrega más abajo con alter table (groups aún no existe aquí);
+  -- null = contenido base, con valor = pregunta propia de esa sala
   type         public.question_type not null,
   prompt       text not null,
   created_at   timestamptz not null default now()
@@ -109,6 +130,12 @@ create table public.group_members (
   joined_at   timestamptz not null default now(),
   primary key (group_id, student_id)
 );
+
+-- 4.1 Preguntas propias de una sala. NULL = contenido base (ver también
+--     comentario en public.questions). Se agrega aquí porque groups
+--     todavía no existía cuando se creó la tabla questions.
+alter table public.questions
+  add column group_id uuid references public.groups(id) on delete cascade;
 
 -- ---------------------------------------------------------------------
 -- 5. Progreso (siempre por alumno + sala)
@@ -150,6 +177,7 @@ create index idx_levels_kingdom       on public.levels(kingdom_id);
 create index idx_skills_kingdom       on public.skills(kingdom_id);
 create index idx_questions_kingdom    on public.questions(kingdom_id);
 create index idx_questions_level      on public.questions(level_id);
+create index idx_questions_group      on public.questions(group_id);
 create index idx_qoptions_question    on public.question_options(question_id);
 create index idx_groups_teacher       on public.groups(teacher_id);
 create index idx_members_student      on public.group_members(student_id);
@@ -162,9 +190,9 @@ create index idx_responses_question   on public.player_responses(question_id);
 -- ---------------------------------------------------------------------
 
 -- 7.1 Crea el perfil automáticamente al registrarse en Auth.
---     NOTA DE SEGURIDAD: aquí se toma el rol de los metadatos para permitir
---     que un docente se registre como 'admin'. En producción conviene
---     forzar 'usuario' por defecto y elevar el rol desde un panel controlado.
+--     El rol SIEMPRE nace 'usuario': el cliente no puede elevarlo.
+--     Solo la Edge Function registrar-docente puede subirlo a 'admin'
+--     (o el que otorgue el código), validando un invitation_codes válido.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -176,7 +204,7 @@ begin
     new.id,
     coalesce(new.raw_user_meta_data->>'username', split_part(coalesce(new.email,'user'), '@', 1)),
     new.raw_user_meta_data->>'full_name',
-    coalesce((new.raw_user_meta_data->>'role')::public.user_role, 'usuario')
+    'usuario'
   );
   return new;
 end;
@@ -186,6 +214,88 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- 7.1a Blinda la columna role: RLS decide QUÉ FILAS puedes tocar, no QUÉ
+--      COLUMNAS, así que profiles_update_self por sí sola no evita que un
+--      alumno se autoasigne 'admin' en el mismo update donde toca su fila.
+--      Este trigger revierte el rol en silencio salvo que la conexión sea
+--      service_role o administrativa (SQL Editor / Table Editor).
+--      IMPORTANTE: NO marcar esta función como SECURITY DEFINER — si lo
+--      fuera, current_user pasaría a ser el dueño de la función y la
+--      comprobación daría permiso siempre, anulando la protección.
+create or replace function public.protect_profile_role()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_jwt_role text;
+begin
+  if new.role is distinct from old.role then
+
+    v_jwt_role := coalesce(
+      nullif(current_setting('request.jwt.claims', true), '')::json ->> 'role',
+      ''
+    );
+
+    if v_jwt_role <> 'service_role'
+       and current_user not in ('service_role', 'postgres', 'supabase_admin')
+    then
+      new.role := old.role;
+    end if;
+
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger trg_protect_profile_role
+  before update on public.profiles
+  for each row execute function public.protect_profile_role();
+
+-- 7.1b Consume un código de institución (valida y descuenta un cupo, todo
+--      de una vez). Devuelve el rol que otorga, o falla con un mensaje claro.
+--      Solo el servidor la ejecuta (revocada para anon/authenticated).
+create or replace function public.consume_invitation_code(p_code text)
+returns public.user_role
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  v_role public.user_role;
+begin
+  update public.invitation_codes
+     set used_count = used_count + 1
+   where code = upper(trim(p_code))
+     and is_active = true
+     and (expires_at is null or expires_at > now())
+     and used_count < max_uses
+  returning grants_role into v_role;
+
+  if v_role is null then
+    raise exception 'Código de institución inválido, vencido o sin cupos disponibles';
+  end if;
+
+  return v_role;
+end;
+$$;
+
+revoke execute on function public.consume_invitation_code(text) from public;
+revoke execute on function public.consume_invitation_code(text) from anon, authenticated;
+
+-- 7.1c Devuelve un cupo si falla la creación de la cuenta a mitad de camino.
+create or replace function public.release_invitation_code(p_code text)
+returns void
+language sql
+security definer set search_path = public
+as $$
+  update public.invitation_codes
+     set used_count = greatest(used_count - 1, 0)
+   where code = upper(trim(p_code));
+$$;
+
+revoke execute on function public.release_invitation_code(text) from public;
+revoke execute on function public.release_invitation_code(text) from anon, authenticated;
+
 -- 7.2 Devuelve el rol del usuario actual sin recursión de RLS (security definer).
 create or replace function public.get_my_role()
 returns public.user_role
@@ -193,6 +303,24 @@ language sql stable
 security definer set search_path = public
 as $$
   select role from public.profiles where id = auth.uid();
+$$;
+
+-- 7.2b Evitan la recursión entre las políticas de groups y group_members
+--      (groups_member_read consulta group_members y gm_teacher consulta groups).
+create or replace function public.is_group_teacher(p_group_id uuid)
+returns boolean
+language sql stable
+security definer set search_path = public
+as $$
+  select exists (select 1 from public.groups g where g.id = p_group_id and g.teacher_id = auth.uid());
+$$;
+
+create or replace function public.is_group_member(p_group_id uuid)
+returns boolean
+language sql stable
+security definer set search_path = public
+as $$
+  select exists (select 1 from public.group_members m where m.group_id = p_group_id and m.student_id = auth.uid());
 $$;
 
 -- 7.3 Genera un código de sala único (sin caracteres ambiguos).
@@ -274,7 +402,7 @@ alter table public.unlocked_skills   enable row level security;
 create policy profiles_select on public.profiles for select to authenticated
   using ( id = auth.uid() or public.get_my_role() in ('admin','auditor') );
 create policy profiles_update_self on public.profiles for update to authenticated
-  using ( id = auth.uid() );
+  using ( id = auth.uid() ) with check ( id = auth.uid() );
 
 -- 8.2 Contenido base (reinos, niveles, skills): lo lee cualquier autenticado;
 --     solo un admin puede modificarlo.
@@ -291,12 +419,33 @@ create policy skills_admin on public.skills for all to authenticated
   using ( public.get_my_role() = 'admin' ) with check ( public.get_my_role() = 'admin' );
 
 -- 8.3 Preguntas y opciones: lectura para autenticados; el docente gestiona las suyas.
-create policy questions_read on public.questions for select to authenticated using ( true );
+-- questions: contenido base (group_id null) lo lee cualquiera; una pregunta
+-- propia de una sala solo la ven su docente, los alumnos de esa sala y el auditor.
+create policy questions_read on public.questions for select to authenticated
+  using (
+    group_id is null
+    or public.get_my_role() = 'auditor'
+    or public.is_group_teacher(group_id)
+    or public.is_group_member(group_id)
+  );
 create policy questions_author on public.questions for all to authenticated
-  using ( author_id = auth.uid() and public.get_my_role() = 'admin' )
-  with check ( author_id = auth.uid() and public.get_my_role() = 'admin' );
+  using ( author_id = auth.uid() and public.get_my_role() = 'admin' and public.is_group_teacher(group_id) )
+  with check ( author_id = auth.uid() and public.get_my_role() = 'admin' and public.is_group_teacher(group_id) );
 
-create policy qoptions_read on public.question_options for select to authenticated using ( true );
+-- question_options hereda la visibilidad de su pregunta.
+create policy qoptions_read on public.question_options for select to authenticated
+  using (
+    exists (
+      select 1 from public.questions q
+      where q.id = question_id
+        and (
+          q.group_id is null
+          or public.get_my_role() = 'auditor'
+          or public.is_group_teacher(q.group_id)
+          or public.is_group_member(q.group_id)
+        )
+    )
+  );
 create policy qoptions_author on public.question_options for all to authenticated
   using ( exists (select 1 from public.questions q where q.id = question_id and q.author_id = auth.uid()) )
   with check ( exists (select 1 from public.questions q where q.id = question_id and q.author_id = auth.uid()) );
@@ -305,7 +454,7 @@ create policy qoptions_author on public.question_options for all to authenticate
 create policy groups_teacher on public.groups for all to authenticated
   using ( teacher_id = auth.uid() ) with check ( teacher_id = auth.uid() );
 create policy groups_member_read on public.groups for select to authenticated
-  using ( exists (select 1 from public.group_members m where m.group_id = id and m.student_id = auth.uid()) );
+  using ( public.is_group_member(id) );
 create policy groups_auditor_read on public.groups for select to authenticated
   using ( public.get_my_role() = 'auditor' );
 
@@ -327,8 +476,8 @@ create policy gm_student_read on public.group_members for select to authenticate
 create policy gm_student_leave on public.group_members for delete to authenticated
   using ( student_id = auth.uid() );
 create policy gm_teacher on public.group_members for all to authenticated
-  using ( exists (select 1 from public.groups g where g.id = group_id and g.teacher_id = auth.uid()) )
-  with check ( exists (select 1 from public.groups g where g.id = group_id and g.teacher_id = auth.uid()) );
+  using ( public.is_group_teacher(group_id) )
+  with check ( public.is_group_teacher(group_id) );
 create policy gm_auditor_read on public.group_members for select to authenticated
   using ( public.get_my_role() = 'auditor' );
 
@@ -358,6 +507,10 @@ create policy us_auditor_read on public.unlocked_skills for select to authentica
 -- ---------------------------------------------------------------------
 -- 9. Datos semilla (2 reinos, niveles, skills, una pregunta de ejemplo)
 -- ---------------------------------------------------------------------
+insert into public.invitation_codes (code, institution, grants_role, max_uses)
+values ('MINED-2025', 'MINED — Nicaragua', 'admin', 50)
+on conflict (code) do nothing;
+
 insert into public.kingdoms (code, name, theme, boss_name, color_hex, order_index) values
   ('verde','Reino Verde — Identidad','Identidad de género y autoconocimiento','El Estereotipo','#1F6F54',1),
   ('rojo' ,'Reino Rojo — Derechos'  ,'Derechos de la mujer y marco legal'    ,'La Ignorancia' ,'#9C2B2B',2);

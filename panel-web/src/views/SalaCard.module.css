@@ -1,0 +1,90 @@
+.card {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-borde);
+  border-radius: 22px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.card:hover { border-color: var(--color-azul); }
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nombre {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--color-azul-oscuro);
+  margin: 0 0 4px 0;
+}
+
+.estado {
+  display: inline-block;
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: var(--radio-pill);
+}
+.estadoActiva { background: var(--color-verde-suave); color: #166534; }
+.estadoInactiva { background: var(--color-borde); color: var(--color-texto-secundario); }
+
+.reinos {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  /* altura mínima = 1 chip; evita que cards con 1 chip vs 2 chips desalineen cabeceras */
+  min-height: 28px;
+  align-content: flex-start;
+}
+
+.badge {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: var(--radio-pill);
+}
+/* #166534 sobre #DCFCE7 ≈ 5.1:1 ✓  |  #991B1B sobre #FEE2E2 ≈ 5.3:1 ✓  (WCAG AA) */
+.verde { background: var(--color-verde-suave); color: #166534; }
+.rojo  { background: var(--color-rojo-suave);  color: #991B1B; }
+
+.alumnos {
+  font-size: 13px;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirmRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirmText {
+  font-size: 13px;
+  color: var(--color-rojo-texto);
+  margin: 0;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+.confirmActions > * { flex: 1; }
