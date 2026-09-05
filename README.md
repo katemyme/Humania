@@ -6,7 +6,7 @@ El jugador despierta en Humania sin memoria y debe recuperar los **Cristales del
 
 ---
 
-# ⚡ Prueba rápida
+#  Prueba rápida
 
 **No hace falta configurar nada ni crear una base de datos.** El panel y el juego ya apuntan a un backend de demostración funcionando. Solo se necesita **Node.js 18+** ([descargar](https://nodejs.org)).
 
@@ -44,7 +44,7 @@ Aquí ya puedes recorrer el panel: dashboard de salas, detalle de sala, editor d
 
 **Opción A — en el navegador (lo más rápido):**
 
-> 🎮 **[Jugar Humania en el navegador](#)** ← *pendiente de publicar (ver «Publicar el build WebGL»)*
+>  **[https://kateomyme.itch.io/humania](#cabe recalcar que esto es solo una demo el juego sigue aun en desarrollo sin embargo pueden probar login, regisro ver algunas pantallas y ver el escenario del primer mundo por otro lado este debe de ser abierto en Escritorio por igual invitamos a todos los evaluadores a leer la historia de nuestro juego la historia la pueden encontrar en docs/Historia del nivel 1 este nivel habla del transfondo de kate    )** ← 
 
 **Opción B — abrir el proyecto en Unity:**
 
@@ -207,7 +207,7 @@ Para que el evaluador juegue sin instalar Unity.
 1. Unity Hub → tu instalación `6000.3.7f1` → engranaje → **Add modules** → marca **WebGL Build Support**.
 2. Unity → **File → Build Profiles** → plataforma **Web** → **Switch Platform** → **Build**. Guarda la salida en una carpeta *fuera* del repo (p. ej. `build-web/`).
 3. Sube esa carpeta a un hosting estático: [itch.io](https://itch.io) (la opción más simple para juegos), GitHub Pages o Netlify.
-4. Pega el enlace en la sección **«⚡ Prueba rápida → paso 4, Opción A»** de este README.
+4. Pega el enlace en la sección **« Prueba rápida → paso 4, Opción A»** de este README.
 
 Las escenas del build ya están configuradas en `ProjectSettings/EditorBuildSettings.asset`, con `Login` como primera: así el juego arranca pidiendo usuario, contraseña y código de sala, y el recorrido queda **Login → Título → Selector de mundos → Bosque de la Empatía**.
 
@@ -243,3 +243,5 @@ Ejemplo: `feat: formulario para crear sala`
 - Xavier Alberto Larios Barberena — Comunicador
 - Victor Mateo Alcocer Lopez — Desarrollador
 - Mauro Engelbert Delgado Saenz — Desarrollador
+
+                                             CREADO CON AMOR POR EQUIPO GUAPOLLON 
