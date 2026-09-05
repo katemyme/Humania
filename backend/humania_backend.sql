@@ -323,6 +323,28 @@ as $$
   select exists (select 1 from public.group_members m where m.group_id = p_group_id and m.student_id = auth.uid());
 $$;
 
+-- 7.2c ¿Soy docente de alguna sala donde está este alumno? La usa
+--      profiles_select para que un docente no lea toda la tabla de
+--      perfiles. Debe ser security definer: consulta group_members y
+--      groups, cuyas políticas llaman a get_my_role() -> profiles, y el
+--      círculo daría 42P17 (infinite recursion detected in policy).
+create or replace function public.is_my_student(p_student_id uuid)
+returns boolean
+language sql stable
+security definer set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.group_members m
+    join public.groups g on g.id = m.group_id
+    where m.student_id = p_student_id
+      and g.teacher_id = auth.uid()
+  );
+$$;
+
+revoke execute on function public.is_my_student(uuid) from public;
+grant  execute on function public.is_my_student(uuid) to authenticated;
+
 -- 7.3 Genera un código de sala único (sin caracteres ambiguos).
 create or replace function public.generate_join_code()
 returns text
@@ -399,8 +421,14 @@ alter table public.player_responses  enable row level security;
 alter table public.unlocked_skills   enable row level security;
 
 -- 8.1 Perfiles: cada quien ve el suyo; admin y auditor ven todos.
+-- Un docente NO lee toda la tabla: solo su perfil y el de los alumnos
+-- de sus salas. El auditor sí lee todo, que es su función.
 create policy profiles_select on public.profiles for select to authenticated
-  using ( id = auth.uid() or public.get_my_role() in ('admin','auditor') );
+  using (
+    id = auth.uid()
+    or public.get_my_role() = 'auditor'
+    or public.is_my_student(id)
+  );
 create policy profiles_update_self on public.profiles for update to authenticated
   using ( id = auth.uid() ) with check ( id = auth.uid() );
 
