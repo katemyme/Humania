@@ -1,12 +1,11 @@
 using System.Collections;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class PantallaLogin : MonoBehaviour
 {
-    [Header("Arrastra aquí tus campos de la pantalla Entrar")]
+    [Header("Arrastra aquï¿½ tus campos de la pantalla Entrar")]
     public TMP_InputField campoUsuario;
     public TMP_InputField campoContrasena;
     public TMP_InputField campoCodigo;
@@ -25,7 +24,7 @@ public class PantallaLogin : MonoBehaviour
 
     void OnEnable()
     {
-        // Los 3 campos llaman a la misma revisión. No importa en cuál de
+        // Los 3 campos llaman a la misma revisiï¿½n. No importa en cuï¿½l de
         // los 3 estabas parado cuando presionaste Enter.
         campoUsuario.onSubmit.AddListener(_ => IntentarEntrar());
         campoContrasena.onSubmit.AddListener(_ => IntentarEntrar());
@@ -45,7 +44,7 @@ public class PantallaLogin : MonoBehaviour
 
         if (campoUsuario.text.Trim() == "" || campoContrasena.text == "" || campoCodigo.text.Trim() == "")
         {
-            Debug.LogWarning("Completa usuario, contraseña y código.");
+            Debug.LogWarning("Completa usuario, contraseï¿½a y cï¿½digo.");
             return;
         }
 
@@ -76,7 +75,7 @@ public class PantallaLogin : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Usuario o contraseña incorrectos.");
+                Debug.LogError("Usuario o contraseï¿½a incorrectos.");
                 enviando = false;
                 yield break;
             }
@@ -86,7 +85,7 @@ public class PantallaLogin : MonoBehaviour
             Sesion.UserId = r.user.id;
         }
 
-        // 2) Unirse a la sala con el código
+        // 2) Unirse a la sala con el cï¿½digo
         string urlSala = SupabaseConfig.Url + "/rest/v1/rpc/join_group";
         string cuerpoSala = JsonUtility.ToJson(new CuerpoSala { p_code = codigo });
         using (UnityWebRequest req = new UnityWebRequest(urlSala, "POST"))
@@ -100,7 +99,7 @@ public class PantallaLogin : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Código de sala inválido o inactivo.");
+                Debug.LogError("Cï¿½digo de sala invï¿½lido o inactivo.");
                 enviando = false;
                 yield break;
             }
@@ -110,8 +109,8 @@ public class PantallaLogin : MonoBehaviour
 
         LoadScene(scene_name);
 
-        Debug.Log("¡Listo! Entraste a la sala. Alumno: " + Sesion.UserId + " · Sala: " + Sesion.GroupId);
-        // Aquí después cargamos la siguiente escena (el hub del juego)
+        Debug.Log("ï¿½Listo! Entraste a la sala. Alumno: " + Sesion.UserId + " ï¿½ Sala: " + Sesion.GroupId);
+        // Aquï¿½ despuï¿½s cargamos la siguiente escena (el hub del juego)
 
         enviando = false;
     }

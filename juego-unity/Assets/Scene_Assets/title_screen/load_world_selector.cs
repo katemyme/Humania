@@ -1,6 +1,5 @@
 using System.Collections;
 using Unity.VectorGraphics;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -61,7 +60,7 @@ public class load_world_selector : MonoBehaviour
 
     IEnumerator LoadLevelASync(string levelToLoad)
     {
-        // Carga la escena de manera asincrónica y rellena el slider de progreso
+        // Carga la escena de manera asincrï¿½nica y rellena el slider de progreso
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelToLoad);
 
         while (!operation.isDone)
