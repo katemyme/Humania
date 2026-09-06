@@ -44,7 +44,7 @@ Aquí ya puedes recorrer el panel: dashboard de salas, detalle de sala, editor d
 
 **Opción A — en el navegador (lo más rápido):**
 
->  **[https://kateomyme.itch.io/humania](#cabe recalcar que esto es solo una demo el juego sigue aun en desarrollo sin embargo pueden probar login, regisro ver algunas pantallas y ver el escenario del primer mundo por otro lado este debe de ser abierto en Escritorio por igual invitamos a todos los evaluadores a leer la historia de nuestro juego la historia la pueden encontrar en docs/Historia del nivel 1 este nivel habla del transfondo de kate    )** ← 
+>  **[https://kateomyme.itch.io/humania](# cabe recalcar que esto es solo una demo el juego sigue aun en desarrollo sin embargo pueden probar login, regisro ver algunas pantallas y ver el escenario del primer mundo por otro lado este debe de ser abierto en Escritorio por igual invitamos a todos los evaluadores a leer la historia de nuestro juego la historia la pueden encontrar en docs/Historia del nivel 1 este nivel habla del transfondo de kate    )** ← 
 
 **Opción B — abrir el proyecto en Unity:**
 
@@ -86,7 +86,7 @@ Cada reino se juega en tres capas: **plataformas** (estilo Mario), **puzzles nar
 
 | Reino | Eje temático | Jefe (idea) | Habilidades | Cristal |
 |---|---|---|---|---|
-| **Verde** | Identidad de género y autoconocimiento | El Estereotipo | Espejo de la Verdad · Voz Propia | Cristal de la Identidad |
+| **Verde** | Identidad de género y autoconocimiento | La violencia | Espejo de la Verdad · Voz Propia | Cristal de la Identidad |
 | **Rojo** | Derechos de la mujer y marco legal | La Ignorancia | Memoria Legal · Cronología | Cristal de los Derechos |
 
 - **El Estereotipo** es una torre de máscaras sin rostro propio. Se vence reflejando cada máscara con el *Espejo de la Verdad*: debajo aparece una persona real y diversa. Se disuelve al quedarse sin disfraces.
