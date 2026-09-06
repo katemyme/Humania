@@ -200,18 +200,6 @@ Solo si no quieres usar el proyecto de demostración. Requiere la [Supabase CLI]
 
 ---
 
-## Publicar el build WebGL
-
-Para que el evaluador juegue sin instalar Unity.
-
-1. Unity Hub → tu instalación `6000.3.7f1` → engranaje → **Add modules** → marca **WebGL Build Support**.
-2. Unity → **File → Build Profiles** → plataforma **Web** → **Switch Platform** → **Build**. Guarda la salida en una carpeta *fuera* del repo (p. ej. `build-web/`).
-3. Sube esa carpeta a un hosting estático: [itch.io](https://itch.io) (la opción más simple para juegos), GitHub Pages o Netlify.
-4. Pega el enlace en la sección **« Prueba rápida → paso 4, Opción A»** de este README.
-
-Las escenas del build ya están configuradas en `ProjectSettings/EditorBuildSettings.asset`, con `Login` como primera: así el juego arranca pidiendo usuario, contraseña y código de sala, y el recorrido queda **Login → Título → Selector de mundos → Bosque de la Empatía**.
-
----
 
 ## Estado actual
 
