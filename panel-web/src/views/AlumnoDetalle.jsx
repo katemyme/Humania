@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import AppHeader from '../components/AppHeader.jsx'
 import StatCard from '../components/StatCard.jsx'
+import Button from '../components/Button.jsx'
+import ResetPasswordModal from './ResetPasswordModal.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import { useAlumnoReporte } from '../hooks/useAlumnoReporte.js'
 import styles from './AlumnoDetalle.module.css'
 
@@ -14,7 +18,9 @@ function formatFecha(iso) {
 export default function AlumnoDetalle() {
   const { id: salaId, studentId } = useParams()
   const navigate = useNavigate()
+  const { isAuditor } = useAuth()
   const { alumno, respuestas, loading, error } = useAlumnoReporte(salaId, studentId)
+  const [resetOpen, setResetOpen] = useState(false)
 
   if (loading) return (
     <div className={styles.page}>
@@ -46,7 +52,15 @@ export default function AlumnoDetalle() {
           ← Volver a la sala
         </button>
 
-        <h1 className={styles.heading}>{alumno.nombre}</h1>
+        <div className={styles.titleRow}>
+          <h1 className={styles.heading}>{alumno.nombre}</h1>
+          {/* El auditor es solo lectura: no puede tocar contraseñas. */}
+          {!isAuditor && (
+            <Button variant="outline" className={styles.resetBtn} onClick={() => setResetOpen(true)}>
+              Restablecer contraseña
+            </Button>
+          )}
+        </div>
 
         <div className={styles.statsGrid}>
           {alumno.porReino.map(r => (
@@ -84,6 +98,10 @@ export default function AlumnoDetalle() {
           </div>
         )}
       </main>
+
+      {resetOpen && (
+        <ResetPasswordModal alumno={alumno} onClose={() => setResetOpen(false)} />
+      )}
     </div>
   )
 }

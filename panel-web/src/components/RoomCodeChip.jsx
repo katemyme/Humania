@@ -1,19 +1,6 @@
 import { useState, useRef } from 'react'
+import { copyToClipboard } from '../utils/clipboard.js'
 import styles from './RoomCodeChip.module.css'
-
-function copyToClipboard(text) {
-  if (navigator.clipboard) return navigator.clipboard.writeText(text)
-  // Fallback para contextos sin Clipboard API
-  const ta = document.createElement('textarea')
-  ta.value = text
-  ta.style.cssText = 'position:fixed;opacity:0'
-  document.body.appendChild(ta)
-  ta.focus()
-  ta.select()
-  document.execCommand('copy')
-  document.body.removeChild(ta)
-  return Promise.resolve()
-}
 
 export default function RoomCodeChip({ codigo, onCopy }) {
   const [copied, setCopied] = useState(false)

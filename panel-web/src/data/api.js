@@ -11,17 +11,17 @@ function friendlyDbError(error) {
   return 'Ocurrió un error al comunicarse con el servidor. Inténtalo de nuevo.'
 }
 
-export async function registrarDocente({ fullName, email, password, code }) {
-  const { data, error } = await supabase.functions.invoke('registrar-docente', {
-    body: { email, password, full_name: fullName, code },
-  })
+// Las Edge Functions devuelven el motivo real en el cuerpo (403, 409…),
+// que supabase-js no expone en error.message: hay que leerlo del context.
+async function invokeFunction(nombre, body) {
+  const { data, error } = await supabase.functions.invoke(nombre, { body })
 
   if (error) {
     let mensaje = friendlyDbError(error)
     if (typeof error.context?.json === 'function') {
       try {
-        const body = await error.context.json()
-        if (body?.error) mensaje = body.error
+        const cuerpo = await error.context.json()
+        if (cuerpo?.error) mensaje = cuerpo.error
       } catch {
         // el cuerpo de la respuesta no era JSON; se mantiene el mensaje genérico
       }
@@ -32,6 +32,27 @@ export async function registrarDocente({ fullName, email, password, code }) {
   if (data?.error) throw new Error(data.error)
 
   return data
+}
+
+export async function registrarDocente({ fullName, email, password, code }) {
+  return invokeFunction('registrar-docente', {
+    email,
+    password,
+    full_name: fullName,
+    code,
+  })
+}
+
+// El docente restablece la contraseña de un alumno de sus salas. La Edge
+// Function valida en el servidor que el alumno sea suyo y devuelve la
+// contraseña resultante para que se la dicte una sola vez. Si no se pasa
+// ninguna, el servidor genera una temporal.
+export async function resetPasswordAlumno(studentId, nuevaPassword) {
+  const data = await invokeFunction('reset-student-password', {
+    student_id: studentId,
+    new_password: nuevaPassword || undefined,
+  })
+  return data.password
 }
 
 const SALA_SELECT = `

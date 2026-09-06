@@ -113,3 +113,16 @@
   color: var(--color-texto-secundario);
   font-size: 14px;
 }
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.resetBtn {
+  width: auto;
+  padding: 0 20px;
+}
