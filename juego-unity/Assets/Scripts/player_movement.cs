@@ -17,6 +17,10 @@ public class player_movement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    private void Awake()
+    {
+        isPaused = false;   // reset por si quedó en true
+    }
 
     void Update()
     {
