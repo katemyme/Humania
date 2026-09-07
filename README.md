@@ -7,9 +7,11 @@ El jugador despierta en Humania sin memoria y debe recuperar los **Cristales del
 ---
 
 #  Prueba rápida
-
-**No hace falta configurar nada ni crear una base de datos.** El panel y el juego ya apuntan a un backend de demostración funcionando. Solo se necesita **Node.js 18+** ([descargar](https://nodejs.org)).
-
+## Forma recomendada:
+Para probar nuestro juego sin configurar el panel de docente, introduzca este código de sala: HKSZ8B
+---
+## Otra alternativa:
+**No hace falta configurar nada ni crear una base de datos.** El panel y el juego ya apuntan a un backend de demostración funcionando. Solo se necesita **Node.js 18+** ([descargar](https://nodejs.org)).   
 ### 1. Levantar el panel del docente (2 minutos)
 
 ```bash
