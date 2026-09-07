@@ -1,0 +1,946 @@
+{
+  "conversaciones": [
+    {
+      "id": "prologo",
+      "nombreEco": "",
+      "requiere": [],
+      "subeZumbidoAlEntrar": false,
+      "lineas": [
+        {
+          "h": "Narrador",
+          "t": "Arriba de todo, donde no hay suelo, viven las ideas antes de bajar a las personas.",
+          "efecto": "",
+          "pausa": 2.2,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "No son grandes. Son luces del tamaño de una mano. Flotan, se rozan, se cuentan cosas.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Una idea que alguien cuida allá abajo brilla más fuerte acá arriba.",
+          "efecto": "",
+          "pausa": 1.8,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Una idea que nadie nombra se va poniendo tenue.",
+          "efecto": "",
+          "pausa": 1.4,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Y tenue.",
+          "efecto": "",
+          "pausa": 1.4,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Y después ya no está.",
+          "efecto": "",
+          "pausa": 2.4,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "A eso le dicen apagarse. Nadie del Fulgor lo dice en voz alta.",
+          "efecto": "",
+          "pausa": 2.4,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi es una de esas luces. Chiquita, amarilla, con cara.",
+          "efecto": "",
+          "pausa": 1.8,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "No recuerda cuánto tiempo lleva flotando ahí. No recuerda casi nada, en realidad, y eso le da un poco de vergüenza cuando las otras luces hablan de antes.",
+          "efecto": "",
+          "pausa": 2.6,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Tampoco recuerda qué idea es. Eso no lo dice nunca.",
+          "efecto": "",
+          "pausa": 2.6,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Esa noche —si allá arriba hay noches— el suelo que no existe se raja.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Se abre una grieta larga, fina, que no hace ruido. Las otras luces se apartan.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi no. Lumi se asoma.",
+          "efecto": "",
+          "pausa": 2.2,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Abajo hay un bosque. Y en el bosque hay algo que suena tanto, tanto, que se oye hasta acá.",
+          "efecto": "",
+          "pausa": 2.4,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Alguien…",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Se le olvida la palabra que sigue. Se deja caer.",
+          "efecto": "",
+          "pausa": 2.2,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "En la caída, una voz sin cuerpo:",
+          "efecto": "",
+          "pausa": 1.4,
+          "auto": true
+        },
+        {
+          "h": "Voz",
+          "t": "No fue para tanto. No, no lo fue. No debería darle importancia. Igual nadie va a querer ayudarme.",
+          "efecto": "",
+          "pausa": 3.5,
+          "auto": true
+        }
+      ],
+      "susurro": []
+    },
+    {
+      "id": "llegada_bosque",
+      "nombreEco": "",
+      "requiere": [],
+      "subeZumbidoAlEntrar": false,
+      "lineas": [
+        {
+          "h": "Narrador",
+          "t": "Lumi cae. El fondo no es un sonido: son ramas que se mueven, ramas que caen, y un zumbido que no se acaba.",
+          "efecto": "zumbido+",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "¿De quién era esa voz?",
+          "efecto": "",
+          "pausa": 1.2,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Sonaba sola.",
+          "efecto": "",
+          "pausa": 1.2,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "No. Sonaba dejada.",
+          "efecto": "",
+          "pausa": 1.8,
+          "auto": false
+        }
+      ],
+      "susurro": []
+    },
+    {
+      "id": "eco1_silencio",
+      "nombreEco": "???",
+      "requiere": [],
+      "subeZumbidoAlEntrar": true,
+      "lineas": [
+        {
+          "h": "Lumi",
+          "t": "¡Hola! Soy Lumi. Estoy acá… en realidad no sé dónde estoy. Creo que vine a ayudar.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Ella no se asusta.",
+          "efecto": "",
+          "pausa": 0.6,
+          "auto": true
+        },
+        {
+          "h": "Eco",
+          "t": "Ah. Vos también.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Yo también qué?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Nada. Ya se te va a pasar.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Vos sos la de la voz? Te oí desde arriba. Decías que no fue para tanto.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "No contesta. Contesta el bosque entero: las ramas, el aire, el zumbido.",
+          "efecto": "",
+          "pausa": 0.8,
+          "auto": true
+        },
+        {
+          "h": "Bosque",
+          "t": "No fue para tanto.",
+          "efecto": "zumbido+",
+          "pausa": 1.0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Este bosque habla.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Este bosque soy yo.",
+          "efecto": "",
+          "pausa": 1.2,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "…No lo entiendo. Capaz después. ¿Cómo te llamás?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Ella no responde. Se queda quieta, mirando al frente.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi espera. Espera un rato largo.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        }
+      ],
+      "susurro": []
+    },
+    {
+      "id": "eco2_risa",
+      "nombreEco": "???",
+      "requiere": [],
+      "subeZumbidoAlEntrar": true,
+      "lineas": [
+        {
+          "h": "Eco",
+          "t": "Uy, una luciérnaga gigante.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Hola. Soy Lumi.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Como sea. Te ves chistoso.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Qué pasó acá? En este bosque vacío.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "AJSKDJDK nada, una bobada. Me dijeron una cosa fea, algo fuera de lugar, yo me reí, todos se rieron. Ya está. Si te reís no duele.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Y dolió?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Te digo que me reí.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Eso no es lo mismo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Silencio.",
+          "efecto": "zumbido+",
+          "pausa": 1.8,
+          "auto": true
+        },
+        {
+          "h": "Eco",
+          "t": "Sos raro, Lumi. Andá a molestar a otra.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        }
+      ],
+      "susurro": [
+        {
+          "h": "Bosque",
+          "t": "No seas exagerada.",
+          "efecto": "",
+          "pausa": 1.0,
+          "auto": true
+        }
+      ]
+    },
+    {
+      "id": "eco3_huida",
+      "nombreEco": "???",
+      "requiere": [],
+      "subeZumbidoAlEntrar": true,
+      "lineas": [
+        {
+          "h": "Lumi",
+          "t": "Hola. ¿Adónde vas?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "A donde haya gente. A donde sea.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Por qué?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Porque sola no puedo. Estar sola no me da miedo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Dijiste dos cosas.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "…",
+          "efecto": "zumbido+",
+          "pausa": 1.6,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Te persigue algo?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi mira hacia atrás. No hay nada.",
+          "efecto": "",
+          "pausa": 0.8,
+          "auto": true
+        },
+        {
+          "h": "Eco",
+          "t": "Ya no. Pero igual camino rápido.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Si ya no hay nada, podés ir despacio.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Sí. Eso dicen todos. Los que después no vienen.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        }
+      ],
+      "susurro": [
+        {
+          "h": "Bosque",
+          "t": "Ya pasó. Superalo.",
+          "efecto": "",
+          "pausa": 1.0,
+          "auto": true
+        }
+      ]
+    },
+    {
+      "id": "eco4_lago",
+      "nombreEco": "???",
+      "requiere": [],
+      "subeZumbidoAlEntrar": true,
+      "lineas": [
+        {
+          "h": "Lumi",
+          "t": "Hola. ¿Qué hay ahí?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "Nada.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Pero brilla.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "No brilla.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi se acerca al brillo.",
+          "efecto": "recuerdo",
+          "pausa": 1.0,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Lo encontré. Ya entiendo. Todas dicen que no fue para tanto, pero mirá, hay algo, hay alguien, esto fue grav—",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "¿Quién te dio permiso?",
+          "efecto": "zumbido+",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Yo solo quería entenderlas, ayud—",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Eco",
+          "t": "¿Quién te dio permiso de meterte en nuestros recuerdos?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "…",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Eco",
+          "t": "No tenés derecho.",
+          "efecto": "luz-",
+          "pausa": 1.5,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Se va sin decir nada más. El brillo del lago se apaga.",
+          "efecto": "",
+          "pausa": 1.2,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Pero es cierto. Yo dije algo cierto. Ellas están sufriendo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Y por primera vez el bosque no le contesta nada.",
+          "efecto": "",
+          "pausa": 2.5,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "El silencio es peor.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        }
+      ],
+      "susurro": []
+    },
+    {
+      "id": "niebla",
+      "nombreEco": "",
+      "requiere": [
+        "eco1_silencio",
+        "eco2_risa",
+        "eco3_huida",
+        "eco4_lago"
+      ],
+      "subeZumbidoAlEntrar": false,
+      "lineas": [
+        {
+          "h": "Lumi",
+          "t": "Ahí hay algo raro.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Niebla",
+          "t": "Vos también contestaste.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Yo?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Niebla",
+          "t": "Estás exagerando.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "No entiendo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Niebla",
+          "t": "Yo no quiero problemas. No los busco.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Niebla",
+          "t": "Mejor no digás nada. Solo molestás. Sos un estorbo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi se queda quieta. Reconoce algo.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Esas palabras ya las oí hoy.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Pero no eran de ellas. Eran tuyas.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "La niebla no responde. Se mete entre los árboles.",
+          "efecto": "zumbido+",
+          "pausa": 1.0,
+          "auto": true
+        },
+        {
+          "h": "Narrador",
+          "t": "El zumbido sube hasta doler.",
+          "efecto": "zumbido+",
+          "pausa": 2.0,
+          "auto": true
+        }
+      ],
+      "susurro": []
+    },
+    {
+      "id": "kate_claro",
+      "nombreEco": "???",
+      "requiere": [
+        "niebla"
+      ],
+      "subeZumbidoAlEntrar": false,
+      "lineas": [
+        {
+          "h": "Kate",
+          "t": "Perdón por ellas.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "¿Las conocés?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "Son mías.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "…",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Kate",
+          "t": "Vos sos la que se cayó del cielo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Lumi. Me llamo Lumi.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "Ya sé. Se lo dijiste a las cuatro.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Lumi se acerca despacio. El zumbido no sube. Es la primera vez.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Perdón por lo del lago.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "A mí no. Pedíselo a ella.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Pero ella sos vos.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "Igual pedíselo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Silencio.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Kate",
+          "t": "Te voy a ahorrar el trabajo, porque ya sé cómo sigue esto. Sí, pasaron cosas. No fueron tan graves. Mi mamá pasó por peor y no anda haciendo un bosque. Hay gente que de verdad la pasa horrible. Yo tuve casa, tuve comida, tuve escuela. Nadie me pegó nunca.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "No fue para tanto.",
+          "efecto": "",
+          "pausa": 1.0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "Ahora te toca decirme que sí fue. Todos dicen eso al principio. Después se van.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "No te voy a decir que fue para tanto.",
+          "efecto": "",
+          "pausa": 1.0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Kate la mira por primera vez.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Te oí desde arriba.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "¿Qué?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Que te oí. Desde arriba de todo, donde no hay suelo. Dijiste que nadie iba a querer ayudarte. Y yo me caí para acá.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "…",
+          "efecto": "",
+          "pausa": 1.8,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "No sé si fue para tanto. Yo no estaba. Pero se oía fuerte.",
+          "efecto": "zumbido-",
+          "pausa": 1.0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "El zumbido baja un punto. No se va. Baja.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Kate",
+          "t": "¿Y ahora qué querés?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Tu nombre.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "¿Para qué?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Porque de donde vengo, lo que nadie nombra se apaga.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "Kate tarda. Tarda mucho.",
+          "efecto": "",
+          "pausa": 3.0,
+          "auto": true
+        },
+        {
+          "h": "Kate",
+          "t": "Kate.",
+          "efecto": "nombre:Kate;luz+",
+          "pausa": 1.5,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "La luz de Lumi sube. Poquito. Kate lo ve y no dice nada.",
+          "efecto": "",
+          "pausa": 1.5,
+          "auto": true
+        },
+        {
+          "h": "Kate",
+          "t": "No te acostumbrés. Mañana capaz no te abro.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Está bien.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "Andate ya. Se está moviendo.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Narrador",
+          "t": "En el borde del claro, la niebla. Kate baja la voz, se endereza, deja de mirar a Lumi. Vuelve a quedarse quieta, igual que el primer eco.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": true
+        },
+        {
+          "h": "Lumi",
+          "t": "Kate.",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Kate",
+          "t": "¿Qué?",
+          "efecto": "",
+          "pausa": 0,
+          "auto": false
+        },
+        {
+          "h": "Lumi",
+          "t": "Nada. Quería decirlo otra vez.",
+          "efecto": "",
+          "pausa": 2.0,
+          "auto": false
+        }
+      ],
+      "susurro": []
+    }
+  ]
+}
