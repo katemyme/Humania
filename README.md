@@ -44,7 +44,7 @@ Aquí ya puedes recorrer el panel: dashboard de salas, detalle de sala, editor d
 
 **Opción A — en el navegador (lo más rápido):**
 
->  **[https://kateomyme.itch.io/humania](# cabe recalcar que esto es solo una demo el juego sigue aun en desarrollo sin embargo pueden probar login, regisro ver algunas pantallas y ver el escenario del primer mundo por otro lado este debe de ser abierto en Escritorio por igual invitamos a todos los evaluadores a leer la historia de nuestro juego la historia la pueden encontrar en docs/Historia del nivel 1 este nivel habla del transfondo de kate    )** ← 
+>  **[https://kateomyme.itch.io/humania] (# cabe recalcar que esto es solo una demo el juego sigue aun en desarrollo sin embargo pueden probar login, regisro ver algunas pantallas y ver el escenario del primer mundo por otro lado este debe de ser abierto en Escritorio por igual invitamos a todos los evaluadores a leer la historia de nuestro juego la historia la pueden encontrar en docs/Historia del nivel 1 este nivel habla del transfondo de kate    )** ← 
 
 **Opción B — abrir el proyecto en Unity:**
 
