@@ -26,6 +26,7 @@ public class NPCDialogo : MonoBehaviour
     [SerializeField] private GameObject globoAviso;
 
     private Conversacion conv;
+    private Collider2D rango;
     private bool jugadorCerca;
     private bool yaHablado;
     private bool zumbidoAplicado;
@@ -35,6 +36,7 @@ public class NPCDialogo : MonoBehaviour
 
     private void Awake()
     {
+        rango = GetComponent<Collider2D>();
         if (globoAviso) globoAviso.SetActive(false);
     }
 
@@ -85,7 +87,30 @@ public class NPCDialogo : MonoBehaviour
         if (!PuedeHablar()) return;
 
         var kb = Keyboard.current;
-        if (kb != null && kb.eKey.wasPressedThisFrame) Hablar();
+        if (kb != null && kb.eKey.wasPressedThisFrame) { Hablar(); return; }
+
+        // En movil no hay tecla E, asi que vale tocar al NPC. Se reusa el mismo
+        // collider de rango que ya define hasta donde se puede hablar, para no
+        // pedir colliders nuevos en cada NPC.
+        var pointer = Pointer.current;
+        if (pointer == null || !pointer.press.wasPressedThisFrame) return;
+        if (rango == null) return;
+
+        var cam = Camera.main;
+        if (cam == null) return;
+
+        Vector2 mundo = cam.ScreenToWorldPoint(pointer.position.ReadValue());
+        if (rango.OverlapPoint(mundo)) Hablar();
+    }
+
+    /// <summary>
+    /// Para enganchar al OnClick del globo de aviso, si prefieres un boton de UI
+    /// en vez de tocar al NPC. Hablar() ya revalida los requisitos por dentro.
+    /// </summary>
+    public void HablarPorToque()
+    {
+        if (automatico || !jugadorCerca) return;
+        Hablar();
     }
 
     // ------------------------------------------------------------------

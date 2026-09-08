@@ -43,6 +43,7 @@ public class DialogoUI : MonoBehaviour
     private bool escribiendo;
     private bool bloqueadoPorPausa;
     private int frameInicio = -1;
+    private int frameUltimoAvance = -1;
     private Coroutine rutina;
     private System.Action alTerminar;
 
@@ -75,16 +76,56 @@ public class DialogoUI : MonoBehaviour
 
     private void Update()
     {
-        if (!EnDialogo || bloqueadoPorPausa) return;
-        if (Time.frameCount == frameInicio) return;
+        if (!PuedeAvanzar()) return;
 
         var kb = Keyboard.current;
-        if (kb == null) return;
+        if (kb != null &&
+            (kb.eKey.wasPressedThisFrame ||
+             kb.spaceKey.wasPressedThisFrame ||
+             kb.enterKey.wasPressedThisFrame))
+        {
+            AvanzarPorInput();
+            return;
+        }
 
-        if (kb.eKey.wasPressedThisFrame ||
-            kb.spaceKey.wasPressedThisFrame ||
-            kb.enterKey.wasPressedThisFrame)
-            Avanzar();
+        // Toque o click. En movil no hay teclado, asi que esta es la via real.
+        // Se lee aqui y no desde un Button para no depender de montar UI a mano.
+        var pointer = Pointer.current;
+        if (pointer != null && pointer.press.wasPressedThisFrame)
+            AvanzarPorInput();
+    }
+
+    /// <summary>
+    /// Avance por toque para el OnClick de un Button. NO hace falta montarlo:
+    /// Update() ya lee el puntero directamente. Si aun asi lo montas, la guarda
+    /// de un avance por frame evita que el mismo toque salte dos lineas.
+    /// </summary>
+    public void AvanzarPorToque()
+    {
+        if (!PuedeAvanzar()) return;
+        AvanzarPorInput();
+    }
+
+    private void AvanzarPorInput()
+    {
+        frameUltimoAvance = Time.frameCount;
+        Avanzar();
+    }
+
+    private bool PuedeAvanzar()
+    {
+        if (!EnDialogo || bloqueadoPorPausa) return false;
+
+        // Un solo avance por frame de entrada del jugador. Asi da igual que
+        // ademas del puntero que lee Update() haya un Button invisible llamando
+        // a AvanzarPorToque(): el mismo toque no se come dos lineas.
+        // Ojo: el avance automatico de las lineas 'auto' llama a Avanzar()
+        // directo desde la corrutina y no pasa por aqui, que es lo que queremos.
+        if (Time.frameCount == frameUltimoAvance) return false;
+
+        // El frame en que se abre el panel no cuenta: evita que la tecla o el
+        // toque que arranca la conversacion se salte la linea 1.
+        return Time.frameCount != frameInicio;
     }
 
     // ------------------------------------------------------------------

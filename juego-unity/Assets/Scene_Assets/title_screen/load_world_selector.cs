@@ -21,7 +21,15 @@ public class load_world_selector : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        // Pointer es la clase base de Mouse, Pen y Touchscreen, asi que cubre
+        // raton y dedo con el mismo codigo. Con Mouse.current el menu no responde
+        // en movil: la plantilla WebGL de Unity hace preventDefault() en touchstart
+        // y eso suprime los mouse events de compatibilidad que el navegador
+        // emitiria despues del toque.
+        var pointer = Pointer.current;
+        if (pointer == null) return;
+
+        if (pointer.press.wasPressedThisFrame)
         {
             if (CheckClickHit())
             {
@@ -39,9 +47,13 @@ public class load_world_selector : MonoBehaviour
         if (isLoading)
             return false;
 
-        // Agarra la posicion del mouse y la convierte a coordenadas del mundo
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector2 worldPos = cam.ScreenToWorldPoint(mousePos);
+        // Agarra la posicion del puntero (raton o dedo) y la pasa a coordenadas del mundo
+        var pointer = Pointer.current;
+        if (pointer == null)
+            return false;
+
+        Vector2 screenPos = pointer.position.ReadValue();
+        Vector2 worldPos = cam.ScreenToWorldPoint(screenPos);
 
         // Lanza un rayo para ver si hay un objeto en esa posicion
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);

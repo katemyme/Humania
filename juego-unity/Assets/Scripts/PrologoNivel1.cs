@@ -39,7 +39,7 @@ public class PrologoNivel1 : MonoBehaviour
     [SerializeField] private Color colorVoz = new Color(0.55f, 0.62f, 0.70f);
 
     [Header("Opciones")]
-    [Tooltip("Permitir saltar el prologo con Escape.")]
+    [Tooltip("Muestra el boton Saltar arriba a la derecha. Escape tambien salta.")]
     [SerializeField] private bool permitirSaltar = true;
 
     private CanvasGroup grupo;
@@ -47,6 +47,7 @@ public class PrologoNivel1 : MonoBehaviour
     private TMP_Text texto;
     private bool tecla;
     private bool saltar;
+    private RectTransform rectSaltar;
 
     // ------------------------------------------------------------------
 
@@ -58,16 +59,40 @@ public class PrologoNivel1 : MonoBehaviour
 
     private void Update()
     {
+        // Ojo con el orden: antes esto hacia 'if (kb == null) return;', que en
+        // movil cortaba el Update entero porque alli no hay teclado.
         var kb = Keyboard.current;
-        if (kb == null) return;
+        if (kb != null)
+        {
+            if (kb.eKey.wasPressedThisFrame ||
+                kb.spaceKey.wasPressedThisFrame ||
+                kb.enterKey.wasPressedThisFrame)
+                tecla = true;
 
-        if (kb.eKey.wasPressedThisFrame ||
-            kb.spaceKey.wasPressedThisFrame ||
-            kb.enterKey.wasPressedThisFrame)
+            if (permitirSaltar && kb.escapeKey.wasPressedThisFrame)
+                saltar = true;
+        }
+
+        // Avanzar con el dedo. 'tecla' es un latch que la corrutina consume y
+        // resetea, asi que ponerlo a true de mas es inofensivo.
+        //
+        // El toque sobre el boton Saltar no cuenta como avance: si contara,
+        // verias saltar una linea en el pointer-down antes de que el OnClick
+        // del boton llegue en el pointer-up.
+        var pointer = Pointer.current;
+        if (pointer != null &&
+            pointer.press.wasPressedThisFrame &&
+            !SobreBotonSaltar(pointer.position.ReadValue()))
             tecla = true;
+    }
 
-        if (permitirSaltar && kb.escapeKey.wasPressedThisFrame)
-            saltar = true;
+    private bool SobreBotonSaltar(Vector2 posPantalla)
+    {
+        if (rectSaltar == null || !rectSaltar.gameObject.activeInHierarchy)
+            return false;
+
+        // Canvas en Screen Space - Overlay: la camara va en null.
+        return RectTransformUtility.RectangleContainsScreenPoint(rectSaltar, posPantalla, null);
     }
 
     // ------------------------------------------------------------------
@@ -109,6 +134,49 @@ public class PrologoNivel1 : MonoBehaviour
         texto.textWrappingMode = TextWrappingModes.Normal;
         texto.text = "";
         Estirar(texto.rectTransform, 70, 70, 70, 70);
+
+        if (permitirSaltar) ConstruirBotonSaltar(go.transform);
+    }
+
+    /// <summary>
+    /// Boton "Saltar" arriba a la derecha, la esquina donde no cae el texto
+    /// (que va centrado con 70 de margen) ni el joystick (abajo).
+    /// </summary>
+    private void ConstruirBotonSaltar(Transform padre)
+    {
+        var goBoton = new GameObject("BotonSaltar");
+        goBoton.transform.SetParent(padre, false);
+
+        var fondoBoton = goBoton.AddComponent<Image>();   // esto crea el RectTransform
+        fondoBoton.color = new Color(1f, 1f, 1f, 0.14f);
+
+        rectSaltar = fondoBoton.rectTransform;
+        rectSaltar.anchorMin = new Vector2(1f, 1f);
+        rectSaltar.anchorMax = new Vector2(1f, 1f);
+        rectSaltar.pivot = new Vector2(1f, 1f);
+        rectSaltar.sizeDelta = new Vector2(92f, 34f);
+        rectSaltar.anchoredPosition = new Vector2(-14f, -12f);
+
+        // El CanvasGroup del prologo tiene blocksRaycasts en false, asi que sin
+        // ignoreParentGroups este boton no seria pulsable.
+        var grupoBoton = goBoton.AddComponent<CanvasGroup>();
+        grupoBoton.ignoreParentGroups = true;
+        grupoBoton.blocksRaycasts = true;
+
+        var boton = goBoton.AddComponent<Button>();
+        boton.targetGraphic = fondoBoton;
+        boton.onClick.AddListener(() => saltar = true);
+
+        var goEtiqueta = new GameObject("Etiqueta");
+        goEtiqueta.transform.SetParent(goBoton.transform, false);
+
+        var etiqueta = goEtiqueta.AddComponent<TextMeshProUGUI>();
+        etiqueta.text = "Saltar \u25B8";
+        etiqueta.fontSize = 15;
+        etiqueta.color = new Color(0.90f, 0.92f, 0.95f, 0.75f);
+        etiqueta.alignment = TextAlignmentOptions.Center;
+        etiqueta.raycastTarget = false;
+        Estirar(etiqueta.rectTransform, 0, 0, 0, 0);
     }
 
     private void Estirar(RectTransform rt, float izq, float der, float arr, float aba)
@@ -224,6 +292,7 @@ public class PrologoNivel1 : MonoBehaviour
     private IEnumerator Fundir()
     {
         texto.text = "";
+        if (rectSaltar != null) rectSaltar.gameObject.SetActive(false);
         for (float t = 0; t < duracionFundido; t += Time.deltaTime)
         {
             grupo.alpha = Mathf.Lerp(1f, 0f, t / duracionFundido);
